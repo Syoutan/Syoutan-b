@@ -95,25 +95,27 @@ namespace WebApplicationTest3.Controllers
             authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
             var rst = UserManager.Delete(user);
-            if (rst.Succeeded)
+            if (user != null)
             {
-                return RedirectToAction("DeleteUserSuccess", new { Message = ManageMessageId.DeleteUserSuccess });
+                if (rst.Succeeded)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = "ユーザーが削除されました。" });
+                }
+                else
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = "ユーザー削除失敗しました。" });
+
+                }
             }
             else
             {
-                return RedirectToAction("DeleteUserSuccess", new { Message = ManageMessageId.Error });
+                
+                return RedirectToAction("DeleteUserSuccess", "Home", new { message = "ユーザー削除失敗しました。ユーザーが見つかりません。" } );
+
             }
         }
 
-        public ActionResult DeleteUserSuccess(ManageMessageId? message)
-        {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.DeleteUserSuccess ? "ユーザーが削除されました。"
-                : "失敗";
-
-                return View();
-        }
-
+ 
         // GET: /Manage/LogOff
         public ActionResult LogOff()
         {

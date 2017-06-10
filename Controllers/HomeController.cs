@@ -26,5 +26,13 @@ namespace WebApplicationTest3.Controllers
 
             return View();
         }
+
+        public ActionResult DeleteUserSuccess(string message)
+        {
+            ViewBag.Message = message;
+
+            return View();
+        }
+
     }
 }
