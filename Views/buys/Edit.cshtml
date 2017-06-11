@@ -55,7 +55,8 @@
                 @Html.ValidationMessageFor(model => model.date, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <div><input type="text" name="old_qnt" value="0" id="OldQnt" style="visibility:hidden"/></div>
+        
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -67,3 +68,13 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<script src="/Scripts/MyJavaScript1.js"></script>
+<script>
+    $(function () {
+        $(function () {
+            var val = $("#qnt").val();
+            $("#OldQnt").val(val);
+        });
+    });
+</script>

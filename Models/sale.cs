@@ -11,12 +11,15 @@ namespace WebApplicationTest3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class sale
     {
         public int id { get; set; }
         public int product_id { get; set; }
         public int customer_id { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         public decimal value { get; set; }
         public int qnt { get; set; }
         public System.DateTime date { get; set; }

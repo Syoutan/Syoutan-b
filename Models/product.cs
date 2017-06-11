@@ -11,7 +11,8 @@ namespace WebApplicationTest3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -24,7 +25,11 @@ namespace WebApplicationTest3.Models
         public int id { get; set; }
         public string pcode { get; set; }
         public string name { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         public Nullable<decimal> value { get; set; }
+
+        [Range(0, int.MaxValue,ErrorMessage = "Range OverFlow")]
         public int stok { get; set; }
         public int maker_id { get; set; }
         public Nullable<int> category_id { get; set; }

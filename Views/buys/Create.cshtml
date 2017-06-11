@@ -6,10 +6,10 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>buy</h4>
         <hr />
@@ -24,7 +24,7 @@
         <div class="form-group">
             @Html.Label("商品名", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox("Default","", htmlAttributes: new { @class = "form-control", id = "PName", Readonly = true })
+                @Html.TextBox("Default", "", htmlAttributes: new { @class = "form-control", id = "PName", Readonly = true })
             </div>
         </div>
 
@@ -72,49 +72,34 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
+<script src="/Scripts/MyJavaScript1.js"></script>
 <script>
+$(function () {
     $(function () {
-        setInterval(function () {
-            var now = new Date();
-            var y = now.getFullYear();
-            var m = now.getMonth() + 1;
-            var d = now.getDate();
-            var w = now.getDay();
-            var h = now.getHours();
-            var mi = now.getMinutes();
-            var s = now.getSeconds();
-            var ad = y + "-" + m + "-" + d + " " + h + ":" + mi + ":" + s;
-            $("#date").val(ad);
-        }, 1000);
-
-        $(function () {
-            var val = $("#product_id").val();
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("GetProducts")',
-                dataType: 'json',
-                data: { id: $("#product_id").val() },
-                success: function (data) {
-                    $('#PName').val(data['PName']);
-                    alert(data['PName']);
-                }
-            });
+        var val = $("#product_id").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetProducts")',
+            dataType: 'json',
+            data: { id: $("#product_id").val() },
+            success: function (data) {
+                $('#PName').val(data['PName']);
+            }
         });
-
-        $("#product_id").change(function () {
-            var val = $("#product_id").val();
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("GetProducts")',
-                dataType: 'json',
-                data: { id: $("#product_id").val() },
-                success: function (data) {
-                    $('#PName').val(data['PName']);
-                    alert(data['PName']);
-                }
-            });
-        });
-
     });
+
+    $("#product_id").change(function () {
+        var val = $("#product_id").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetProducts")',
+            dataType: 'json',
+            data: { id: $("#product_id").val() },
+            success: function (data) {
+                $('#PName').val(data['PName']);
+            }
+        });
+    });
+});
 
 </script>

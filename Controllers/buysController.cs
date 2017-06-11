@@ -72,9 +72,36 @@ namespace WebApplicationTest3.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.buy.Add(buy);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                using (var tran = db.Database.BeginTransaction())
+                {
+                        try
+                        {
+                            product p = db.product.Find(buy.product_id);
+                            if (p == null)
+                            {
+                                tran.Rollback();
+                            }
+                            else
+                            {
+                                db.buy.Add(buy);
+                                db.SaveChanges();
+                                p.stok = p.stok + buy.qnt;
+                                db.Entry(p).State = EntityState.Modified;
+                                db.SaveChanges();
+                                tran.Commit();
+                            }
+                            return RedirectToAction("Index");
+                        }
+                        catch (Exception)
+                        {
+                            tran.Rollback();
+                            throw; 
+                        }
+                }
+
+                //db.buy.Add(buy);
+                //db.SaveChanges();
+                //return RedirectToAction("Index");
             }
 
             ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
@@ -94,6 +121,7 @@ namespace WebApplicationTest3.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
             ViewBag.supplier_id = new SelectList(db.supplier, "id", "name", buy.supplier_id);
             return View(buy);
@@ -104,16 +132,50 @@ namespace WebApplicationTest3.Controllers
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,product_id,supplier_id,value,qnt,date")] buy buy)
+        public ActionResult Edit([Bind(Include = "id,product_id,supplier_id,value,qnt,date")] buy buy,string old_qnt)
         {
+            /*
             if (ModelState.IsValid)
             {
                 db.Entry(buy).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            */
+            int oqnt=int.Parse(old_qnt);
+            if (ModelState.IsValid)
+            {                
+
+                using (var tran = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        product p = db.product.Find(buy.product_id);
+                        if (p == null)
+                        {
+                            tran.Rollback();
+                        }
+                        else
+                        {
+                            p.stok = p.stok + buy.qnt - oqnt;
+                            db.Entry(p).State = EntityState.Modified;
+                            db.SaveChanges();
+                            db.Entry(buy).State = EntityState.Modified;
+                            db.SaveChanges();
+                            tran.Commit();
+                        }
+                        return RedirectToAction("Index"); ;
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                }
+            }
             ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
             ViewBag.supplier_id = new SelectList(db.supplier, "id", "name", buy.supplier_id);
+
             return View(buy);
         }
 
@@ -137,9 +199,38 @@ namespace WebApplicationTest3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            buy buy = db.buy.Find(id);
-            db.buy.Remove(buy);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                buy buy = db.buy.Find(id);
+
+                using (var tran = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        product p = db.product.Find(buy.product_id);
+                        if (p == null)
+                        {
+                            tran.Rollback();
+                        }
+                        else
+                        {
+                            p.stok = p.stok - buy.qnt;
+                            db.Entry(p).State = EntityState.Modified;
+                            db.SaveChanges();
+                            db.buy.Remove(buy);
+                            db.SaveChanges();
+                            tran.Commit();
+                        }
+                        return RedirectToAction("Index"); ;
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
