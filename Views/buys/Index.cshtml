@@ -1,0 +1,63 @@
+﻿@model IEnumerable<WebApplicationTest3.Models.buy>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            <h4>商品コード</h4>
+        </th>
+        <th>
+            <h4>商品名</h4>
+        </th>
+       <th>
+           <h4>仕入先</h4>
+        </th>
+        <th>
+            <h4>仕入れ価格</h4>
+        </th>
+        <th>
+            <h4>仕入れ数</h4>
+        </th>
+        <th>
+            <h4>日付</h4>
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.product.pcode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.product.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.supplier.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qnt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.date)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

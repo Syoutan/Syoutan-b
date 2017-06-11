@@ -19,7 +19,7 @@ namespace WebApplicationTest3.Models
         public int customer_id { get; set; }
         public decimal value { get; set; }
         public int qnt { get; set; }
-        public byte[] date { get; set; }
+        public System.DateTime date { get; set; }
     
         public virtual customer customer { get; set; }
         public virtual product product { get; set; }

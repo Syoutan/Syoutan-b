@@ -12,7 +12,7 @@ namespace WebApplicationTest3.Controllers
 {
     public class categoriesController : Controller
     {
-        private ProductManage1Entities db = new ProductManage1Entities();
+        private ProductManage1Entities1 db = new ProductManage1Entities1();
 
         // GET: categories
         public ActionResult Index()

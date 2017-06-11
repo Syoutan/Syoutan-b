@@ -9,7 +9,7 @@
     <Property Name="supplier_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="qnt" Type="Int32" Nullable="false" />
-    <Property Name="date" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="product" Relationship="Self.FK_buy_product" FromRole="buy" ToRole="product" />
     <NavigationProperty Name="supplier" Relationship="Self.FK_buy_supplier" FromRole="buy" ToRole="supplier" />
   </EntityType>
@@ -65,7 +65,7 @@
     <Property Name="customer_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="qnt" Type="Int32" Nullable="false" />
-    <Property Name="date" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="customer" Relationship="Self.FK_sale_customer" FromRole="sale" ToRole="customer" />
     <NavigationProperty Name="product" Relationship="Self.FK_sale_product" FromRole="sale" ToRole="product" />
   </EntityType>
@@ -103,7 +103,7 @@
     <Property Name="id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="qnt" Type="Int32" Nullable="false" />
-    <Property Name="date" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="pcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="stok" Type="Int32" Nullable="false" />
@@ -221,7 +221,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="ProductManage1Entities" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="ProductManage1Entities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="buy" EntityType="Self.buy" />
     <EntitySet Name="category" EntityType="Self.category" />
     <EntitySet Name="customer" EntityType="Self.customer" />

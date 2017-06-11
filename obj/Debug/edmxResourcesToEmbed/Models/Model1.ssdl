@@ -9,7 +9,7 @@
     <Property Name="supplier_id" Type="int" Nullable="false" />
     <Property Name="value" Type="money" Nullable="false" />
     <Property Name="qnt" Type="int" Nullable="false" />
-    <Property Name="date" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="date" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="category">
     <Key>
@@ -56,7 +56,7 @@
     <Property Name="customer_id" Type="int" Nullable="false" />
     <Property Name="value" Type="money" Nullable="false" />
     <Property Name="qnt" Type="int" Nullable="false" />
-    <Property Name="date" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="date" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="supplier">
     <Key>
@@ -93,7 +93,7 @@
     <Property Name="id" Type="int" Nullable="false" />
     <Property Name="value" Type="money" Nullable="false" />
     <Property Name="qnt" Type="int" Nullable="false" />
-    <Property Name="date" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="date" Type="datetime" Nullable="false" />
     <Property Name="pcode" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="stok" Type="int" Nullable="false" />

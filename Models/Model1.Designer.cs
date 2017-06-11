@@ -1,4 +1,4 @@
-﻿// T4 コード生成がモデル 'd:\take\documents\visual studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\Models\Model1.edmx' に対して有効です。 
+﻿// T4 コード生成がモデル 'D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\Models\Model1.edmx' に対して有効です。 
 // レガシ コード生成を有効にするには、'コード生成方法' デザイナー
 // プロパティの値を 'レガシ ObjectContext' に変更します。このプロパティは、デザイナーでモデルが開かれている場合に [プロパティ] ウィンドウ
 // で使用できます。

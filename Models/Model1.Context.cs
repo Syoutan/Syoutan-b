@@ -15,10 +15,10 @@ namespace WebApplicationTest3.Models
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class ProductManage1Entities : DbContext
+    public partial class ProductManage1Entities1 : DbContext
     {
-        public ProductManage1Entities()
-            : base("name=ProductManage1Entities")
+        public ProductManage1Entities1()
+            : base("name=ProductManage1Entities1")
         {
         }
     

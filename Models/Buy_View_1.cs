@@ -17,7 +17,7 @@ namespace WebApplicationTest3.Models
         public int id { get; set; }
         public decimal value { get; set; }
         public int qnt { get; set; }
-        public byte[] date { get; set; }
+        public System.DateTime date { get; set; }
         public string pcode { get; set; }
         public string name { get; set; }
         public int stok { get; set; }

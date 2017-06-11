@@ -10,107 +10,135 @@ using WebApplicationTest3.Models;
 
 namespace WebApplicationTest3.Controllers
 {
-    public class makersController : Controller
+    public class ResultProduct
+    {
+        public string PName { get; set; }
+        public decimal PValue { get; set; }
+        public int PStok { get; set; }
+    }
+
+    public class buysController : Controller
     {
         private ProductManage1Entities1 db = new ProductManage1Entities1();
 
-        // GET: makers
+        // GET: buys
         public ActionResult Index()
         {
-            return View(db.maker.ToList());
+            var buy = db.buy.Include(b => b.product).Include(b => b.supplier);
+            return View(buy.ToList());
         }
 
-        // GET: makers/Details/5
+        // GET: buys/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            maker maker = db.maker.Find(id);
-            if (maker == null)
+            buy buy = db.buy.Find(id);
+            if (buy == null)
             {
                 return HttpNotFound();
             }
-            return View(maker);
+            return View(buy);
         }
 
-        // GET: makers/Create
-        public ActionResult Create()
+        public JsonResult GetProducts(string id)
         {
+
+            int iid = int.Parse(id);
+            product pd = db.product.Find(iid);
+
+            ResultProduct rpd = new ResultProduct() { PName = pd.name,PStok = pd.stok,PValue =(decimal) pd.value };
+
+            return Json(rpd, JsonRequestBehavior.AllowGet);
+        }
+
+
+            // GET: buys/Create
+            public ActionResult Create()
+        {
+            ViewBag.product_id = new SelectList(db.product, "id", "pcode");
+            ViewBag.supplier_id = new SelectList(db.supplier, "id", "name");
             return View();
         }
 
-        // POST: makers/Create
+        // POST: buys/Create
         // 過多ポスティング攻撃を防止するには、バインド先とする特定のプロパティを有効にしてください。
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,name,address1,TEL")] maker maker)
+        public ActionResult Create([Bind(Include = "id,product_id,supplier_id,value,qnt,date")] buy buy)
         {
             if (ModelState.IsValid)
             {
-                db.maker.Add(maker);
+                db.buy.Add(buy);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(maker);
+            ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
+            ViewBag.supplier_id = new SelectList(db.supplier, "id", "name", buy.supplier_id);
+            return View(buy);
         }
 
-        // GET: makers/Edit/5
+        // GET: buys/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            maker maker = db.maker.Find(id);
-            if (maker == null)
+            buy buy = db.buy.Find(id);
+            if (buy == null)
             {
                 return HttpNotFound();
             }
-            return View(maker);
+            ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
+            ViewBag.supplier_id = new SelectList(db.supplier, "id", "name", buy.supplier_id);
+            return View(buy);
         }
 
-        // POST: makers/Edit/5
+        // POST: buys/Edit/5
         // 過多ポスティング攻撃を防止するには、バインド先とする特定のプロパティを有効にしてください。
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,name,address1,TEL")] maker maker)
+        public ActionResult Edit([Bind(Include = "id,product_id,supplier_id,value,qnt,date")] buy buy)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(maker).State = EntityState.Modified;
+                db.Entry(buy).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(maker);
+            ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
+            ViewBag.supplier_id = new SelectList(db.supplier, "id", "name", buy.supplier_id);
+            return View(buy);
         }
 
-        // GET: makers/Delete/5
+        // GET: buys/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            maker maker = db.maker.Find(id);
-            if (maker == null)
+            buy buy = db.buy.Find(id);
+            if (buy == null)
             {
                 return HttpNotFound();
             }
-            return View(maker);
+            return View(buy);
         }
 
-        // POST: makers/Delete/5
+        // POST: buys/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            maker maker = db.maker.Find(id);
-            db.maker.Remove(maker);
+            buy buy = db.buy.Find(id);
+            db.buy.Remove(buy);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

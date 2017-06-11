@@ -1,0 +1,120 @@
+﻿@model WebApplicationTest3.Models.buy
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>buy</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("商品コード", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("product_id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.product_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("商品名", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("Default","", htmlAttributes: new { @class = "form-control", id = "PName", Readonly = true })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("仕入先", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("supplier_id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.supplier_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("仕入価格", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.value, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.value, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("購入数", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.qnt, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.qnt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("タイムスタンプ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script>
+    $(function () {
+        setInterval(function () {
+            var now = new Date();
+            var y = now.getFullYear();
+            var m = now.getMonth() + 1;
+            var d = now.getDate();
+            var w = now.getDay();
+            var h = now.getHours();
+            var mi = now.getMinutes();
+            var s = now.getSeconds();
+            var ad = y + "-" + m + "-" + d + " " + h + ":" + mi + ":" + s;
+            $("#date").val(ad);
+        }, 1000);
+
+        $(function () {
+            var val = $("#product_id").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetProducts")',
+                dataType: 'json',
+                data: { id: $("#product_id").val() },
+                success: function (data) {
+                    $('#PName').val(data['PName']);
+                    alert(data['PName']);
+                }
+            });
+        });
+
+        $("#product_id").change(function () {
+            var val = $("#product_id").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetProducts")',
+                dataType: 'json',
+                data: { id: $("#product_id").val() },
+                success: function (data) {
+                    $('#PName').val(data['PName']);
+                    alert(data['PName']);
+                }
+            });
+        });
+
+    });
+
+</script>
