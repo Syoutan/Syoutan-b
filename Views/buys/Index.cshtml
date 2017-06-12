@@ -4,10 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>入荷リスト</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("新入荷作成", "Create", "", new { @class = "btn btn-default" })
 </p>
 <table class="table">
     <tr>
@@ -20,7 +20,6 @@
         <th>
             <h4>在庫数</h4>
         </th>
-
        <th>
            <h4>仕入先</h4>
         </th>
@@ -28,7 +27,7 @@
             <h4>仕入価格</h4>
         </th>
         <th>
-            <h4>仕入れ数</h4>
+            <h4>入荷数</h4>
         </th>
         <th>
             <h4>日付</h4>
@@ -61,7 +60,7 @@
             @Html.DisplayFor(modelItem => item.date)
         </td>
         <td>
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("削除", "Delete", new { id=item.id })
         </td>
     </tr>
 }

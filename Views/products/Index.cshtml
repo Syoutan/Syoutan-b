@@ -4,32 +4,32 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>商品リスト</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("新商品作成", "Create", "", new { @class = "btn btn-default" })
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.pcode)
+            <h4>商品コード</h4>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.name)
+            <h4>商品名</h4>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.value)
+            <h4>標準販売価格</h4>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.stok)
+            <h4>在庫数</h4>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.category.name)
+            <h4>メーカー名</h4>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.maker.name)
+            <h4>カテゴリー</h4>
         </th>
-        <th></th>
+         <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -47,15 +47,14 @@
             @Html.DisplayFor(modelItem => item.stok)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.category.name)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.maker.name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.DisplayFor(modelItem => item.category.name)
+        </td>
+        <td>
+            @Html.ActionLink("編集", "Edit", new { id=item.id }) |
+            @Html.ActionLink("削除", "Delete", new { id=item.id })
         </td>
     </tr>
 }

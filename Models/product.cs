@@ -23,13 +23,18 @@ namespace WebApplicationTest3.Models
         }
     
         public int id { get; set; }
+
+        [Display(Name = "商品コード")]
         public string pcode { get; set; }
+        [Display(Name = "商品名")]
         public string name { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
+        [Display(Name = "標準販売価格")]
         public Nullable<decimal> value { get; set; }
 
         [Range(0, int.MaxValue,ErrorMessage = "Range OverFlow")]
+        [Display(Name = "在庫数")]
         public int stok { get; set; }
         public int maker_id { get; set; }
         public Nullable<int> category_id { get; set; }

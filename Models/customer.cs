@@ -11,7 +11,8 @@ namespace WebApplicationTest3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,7 +22,9 @@ namespace WebApplicationTest3.Models
         }
     
         public int id { get; set; }
+        [Display(Name = "顧客名")]
         public string name { get; set; }
+        [Display(Name = "住所")]
         public string address { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
