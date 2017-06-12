@@ -4,7 +4,7 @@
     ViewBag.Title = "Create";
 }
 
-<h2>商品作成</h2>
+<h2>新規作成</h2>
 
 @using (Html.BeginForm()) 
 {
@@ -64,12 +64,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="作成" class="btn btn-default" />
+                <input type="submit" value="新規作成" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("作成しないで商品リストへ", "Index", "", new { @class = "btn btn-default" })
+    @Html.ActionLink("作成しないでリストへ", "Index", "", new { @class = "btn btn-default" })
 </div>

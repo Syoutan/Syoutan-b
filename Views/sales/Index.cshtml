@@ -1,10 +1,10 @@
-﻿@model IEnumerable<WebApplicationTest3.Models.buy>
+﻿@model IEnumerable<WebApplicationTest3.Models.sale>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>入荷リスト</h2>
+<h2>出荷リスト</h2>
 
 <p>
     @Html.ActionLink("新規作成", "Create", "", new { @class = "btn btn-default" })
@@ -12,25 +12,25 @@
 <table class="table">
     <tr>
         <th>
-            <h4>商品コード</h4>
+            @Html.DisplayNameFor(model => model.product.pcode)
         </th>
         <th>
-            <h4>商品名</h4>
+            @Html.DisplayNameFor(model => model.product.name)
         </th>
         <th>
-            <h4>在庫数</h4>
-        </th>
-       <th>
-           <h4>仕入先</h4>
+            @Html.DisplayNameFor(model => model.product.stok)
         </th>
         <th>
-            <h4>仕入価格</h4>
+            @Html.DisplayNameFor(model => model.customer.name)
         </th>
         <th>
-            <h4>入荷数</h4>
+            @Html.DisplayNameFor(model => model.value)
         </th>
         <th>
-            <h4>日付</h4>
+            @Html.DisplayNameFor(model => model.qnt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.date)
         </th>
         <th></th>
     </tr>
@@ -46,9 +46,8 @@
         <td>
             @Html.DisplayFor(modelItem => item.product.stok)
         </td>
-
         <td>
-            @Html.DisplayFor(modelItem => item.supplier.name)
+            @Html.DisplayFor(modelItem => item.customer.name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.value)

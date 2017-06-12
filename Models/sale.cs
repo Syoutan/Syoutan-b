@@ -18,12 +18,14 @@ namespace WebApplicationTest3.Models
         public int id { get; set; }
         public int product_id { get; set; }
         public int customer_id { get; set; }
-
+        [Required]
         [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         [Display(Name = "販売価格")]
         public decimal value { get; set; }
+        [Required]
         [Display(Name = "出荷数")]
         public int qnt { get; set; }
+        
         [Display(Name = "タイムスタンプ")]
         public System.DateTime date { get; set; }
     

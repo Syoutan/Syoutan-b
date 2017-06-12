@@ -1,4 +1,4 @@
-﻿@model WebApplicationTest3.Models.category
+﻿@model WebApplicationTest3.Models.supplier
 
 @{
     ViewBag.Title = "Delete";
@@ -8,7 +8,7 @@
 
 <h3>削除しますか?</h3>
 <div>
-    <h4>カテゴリー</h4>
+    <h4>仕入先</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -17,6 +17,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address)
         </dd>
 
     </dl>

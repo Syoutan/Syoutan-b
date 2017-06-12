@@ -10,107 +10,107 @@ using WebApplicationTest3.Models;
 
 namespace WebApplicationTest3.Controllers
 {
-    public class makersController : Controller
+    public class suppliersController : Controller
     {
         private ProductManage1Entities1 db = new ProductManage1Entities1();
 
-        // GET: makers
+        // GET: suppliers
         public ActionResult Index()
         {
-            return View(db.maker.ToList());
+            return View(db.supplier.ToList());
         }
 
-        // GET: makers/Details/5
+        // GET: suppliers/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            maker maker = db.maker.Find(id);
-            if (maker == null)
+            supplier supplier = db.supplier.Find(id);
+            if (supplier == null)
             {
                 return HttpNotFound();
             }
-            return View(maker);
+            return View(supplier);
         }
 
-        // GET: makers/Create
+        // GET: suppliers/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: makers/Create
+        // POST: suppliers/Create
         // 過多ポスティング攻撃を防止するには、バインド先とする特定のプロパティを有効にしてください。
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,name,PostNo,address1,TEL")] maker maker)
+        public ActionResult Create([Bind(Include = "id,name,address")] supplier supplier)
         {
             if (ModelState.IsValid)
             {
-                db.maker.Add(maker);
+                db.supplier.Add(supplier);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(maker);
+            return View(supplier);
         }
 
-        // GET: makers/Edit/5
+        // GET: suppliers/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            maker maker = db.maker.Find(id);
-            if (maker == null)
+            supplier supplier = db.supplier.Find(id);
+            if (supplier == null)
             {
                 return HttpNotFound();
             }
-            return View(maker);
+            return View(supplier);
         }
 
-        // POST: makers/Edit/5
+        // POST: suppliers/Edit/5
         // 過多ポスティング攻撃を防止するには、バインド先とする特定のプロパティを有効にしてください。
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,name,PostNo,address1,TEL")] maker maker)
+        public ActionResult Edit([Bind(Include = "id,name,address")] supplier supplier)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(maker).State = EntityState.Modified;
+                db.Entry(supplier).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(maker);
+            return View(supplier);
         }
 
-        // GET: makers/Delete/5
+        // GET: suppliers/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            maker maker = db.maker.Find(id);
-            if (maker == null)
+            supplier supplier = db.supplier.Find(id);
+            if (supplier == null)
             {
                 return HttpNotFound();
             }
-            return View(maker);
+            return View(supplier);
         }
 
-        // POST: makers/Delete/5
+        // POST: suppliers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            maker maker = db.maker.Find(id);
-            db.maker.Remove(maker);
+            supplier supplier = db.supplier.Find(id);
+            db.supplier.Remove(supplier);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

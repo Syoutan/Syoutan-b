@@ -29,6 +29,7 @@
     <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="sale" Relationship="Self.FK_sale_customer" FromRole="customer" ToRole="sale" />
+    <Property Name="mailaddress" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
   </EntityType>
   <EntityType Name="maker">
     <Key>
@@ -39,6 +40,7 @@
     <Property Name="address1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="TEL" Type="Int32" />
     <NavigationProperty Name="product" Relationship="Self.FK_product_maker" FromRole="maker" ToRole="product" />
+    <Property Name="PostNo" Type="Int32" />
   </EntityType>
   <EntityType Name="product">
     <Key>

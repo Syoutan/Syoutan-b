@@ -1,5 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="ProductManage1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="ProductManage1Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ProductManage1ModelStoreContainer">
+    <EntitySet Name="buy" EntityType="ProductManage1Model.Store.buy" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="category" EntityType="ProductManage1Model.Store.category" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="customer" EntityType="ProductManage1Model.Store.customer" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="maker" EntityType="ProductManage1Model.Store.maker" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="product" EntityType="ProductManage1Model.Store.product" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="sale" EntityType="ProductManage1Model.Store.sale" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="supplier" EntityType="ProductManage1Model.Store.supplier" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="sysdiagrams" EntityType="ProductManage1Model.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Buy_View_1" EntityType="ProductManage1Model.Store.Buy_View_1" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Product_View_1" EntityType="ProductManage1Model.Store.Product_View_1" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Sale_View_1" EntityType="ProductManage1Model.Store.Sale_View_1" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_buy_product" Association="ProductManage1Model.Store.FK_buy_product">
+      <End Role="product" EntitySet="product" />
+      <End Role="buy" EntitySet="buy" />
+    </AssociationSet>
+    <AssociationSet Name="FK_buy_supplier" Association="ProductManage1Model.Store.FK_buy_supplier">
+      <End Role="supplier" EntitySet="supplier" />
+      <End Role="buy" EntitySet="buy" />
+    </AssociationSet>
+    <AssociationSet Name="FK_product_category" Association="ProductManage1Model.Store.FK_product_category">
+      <End Role="category" EntitySet="category" />
+      <End Role="product" EntitySet="product" />
+    </AssociationSet>
+    <AssociationSet Name="FK_sale_customer" Association="ProductManage1Model.Store.FK_sale_customer">
+      <End Role="customer" EntitySet="customer" />
+      <End Role="sale" EntitySet="sale" />
+    </AssociationSet>
+    <AssociationSet Name="FK_product_maker" Association="ProductManage1Model.Store.FK_product_maker">
+      <End Role="maker" EntitySet="maker" />
+      <End Role="product" EntitySet="product" />
+    </AssociationSet>
+    <AssociationSet Name="FK_sale_product" Association="ProductManage1Model.Store.FK_sale_product">
+      <End Role="product" EntitySet="product" />
+      <End Role="sale" EntitySet="sale" />
+    </AssociationSet>
+  </EntityContainer>
   <EntityType Name="buy">
     <Key>
       <PropertyRef Name="id" />
@@ -7,7 +44,7 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="product_id" Type="int" Nullable="false" />
     <Property Name="supplier_id" Type="int" Nullable="false" />
-    <Property Name="value" Type="money" Nullable="false" />
+    <Property Name="value" Type="decimal" Nullable="false" Precision="19" Scale="4" />
     <Property Name="qnt" Type="int" Nullable="false" />
     <Property Name="date" Type="datetime" Nullable="false" />
   </EntityType>
@@ -16,36 +53,38 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
   </EntityType>
   <EntityType Name="customer">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="address" Type="nvarchar" MaxLength="100" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="address" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="mailaddress" Type="nchar" Nullable="true" MaxLength="100" />
   </EntityType>
   <EntityType Name="maker">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="200" Nullable="false" />
-    <Property Name="address1" Type="nvarchar" MaxLength="100" />
-    <Property Name="TEL" Type="int" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="200" />
+    <Property Name="address1" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="TEL" Type="int" Nullable="true" />
+    <Property Name="PostNo" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="product">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="pcode" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="value" Type="money" />
+    <Property Name="pcode" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="value" Type="decimal" Nullable="true" Precision="19" Scale="4" />
     <Property Name="stok" Type="int" Nullable="false" />
     <Property Name="maker_id" Type="int" Nullable="false" />
-    <Property Name="category_id" Type="int" />
+    <Property Name="category_id" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="sale">
     <Key>
@@ -54,7 +93,7 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="product_id" Type="int" Nullable="false" />
     <Property Name="customer_id" Type="int" Nullable="false" />
-    <Property Name="value" Type="money" Nullable="false" />
+    <Property Name="value" Type="decimal" Nullable="false" Precision="19" Scale="4" />
     <Property Name="qnt" Type="int" Nullable="false" />
     <Property Name="date" Type="datetime" Nullable="false" />
   </EntityType>
@@ -63,21 +102,19 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="address" Type="nvarchar" MaxLength="100" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="address" Type="nvarchar" Nullable="true" MaxLength="100" />
   </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
       <PropertyRef Name="diagram_id" />
     </Key>
-    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
     <Property Name="principal_id" Type="int" Nullable="false" />
     <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="version" Type="int" />
-    <Property Name="definition" Type="varbinary(max)" />
+    <Property Name="version" Type="int" Nullable="true" />
+    <Property Name="definition" Type="varbinary(max)" Nullable="true" />
   </EntityType>
-  <!--生成中に見つかったエラー:
-警告 6002: テーブル/ビュー 'ProductManage1.dbo.Buy_View_1' には主キーが定義されていません。主キーは推論され、定義は読み取り専用のテーブル/ビューとして作成されました。-->
   <EntityType Name="Buy_View_1">
     <Key>
       <PropertyRef Name="id" />
@@ -91,17 +128,15 @@
       <PropertyRef Name="Expr2" />
     </Key>
     <Property Name="id" Type="int" Nullable="false" />
-    <Property Name="value" Type="money" Nullable="false" />
+    <Property Name="value" Type="decimal" Nullable="false" Precision="19" Scale="4" />
     <Property Name="qnt" Type="int" Nullable="false" />
     <Property Name="date" Type="datetime" Nullable="false" />
-    <Property Name="pcode" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="pcode" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
     <Property Name="stok" Type="int" Nullable="false" />
-    <Property Name="Expr1" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="Expr2" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Expr1" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="Expr2" Type="nvarchar" Nullable="false" MaxLength="200" />
   </EntityType>
-  <!--生成中に見つかったエラー:
-警告 6002: テーブル/ビュー 'ProductManage1.dbo.Product_View_1' には主キーが定義されていません。主キーは推論され、定義は読み取り専用のテーブル/ビューとして作成されました。-->
   <EntityType Name="Product_View_1">
     <Key>
       <PropertyRef Name="id" />
@@ -112,15 +147,13 @@
       <PropertyRef Name="Expr2" />
     </Key>
     <Property Name="id" Type="int" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="value" Type="money" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="value" Type="decimal" Nullable="true" Precision="19" Scale="4" />
     <Property Name="stok" Type="int" Nullable="false" />
-    <Property Name="pcode" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="Expr1" Type="nvarchar" MaxLength="200" Nullable="false" />
-    <Property Name="Expr2" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="pcode" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Expr1" Type="nvarchar" Nullable="false" MaxLength="200" />
+    <Property Name="Expr2" Type="nvarchar" Nullable="false" MaxLength="100" />
   </EntityType>
-  <!--生成中に見つかったエラー:
-警告 6002: テーブル/ビュー 'ProductManage1.dbo.Sale_View_1' には主キーが定義されていません。主キーは推論され、定義は読み取り専用のテーブル/ビューとして作成されました。-->
   <EntityType Name="Sale_View_1">
     <Key>
       <PropertyRef Name="id" />
@@ -134,18 +167,18 @@
       <PropertyRef Name="Expr2" />
     </Key>
     <Property Name="id" Type="int" Nullable="false" />
-    <Property Name="value" Type="money" Nullable="false" />
+    <Property Name="value" Type="decimal" Nullable="false" Precision="19" Scale="4" />
     <Property Name="qnt" Type="int" Nullable="false" />
-    <Property Name="date" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-    <Property Name="pcode" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="Expr1" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="date" Type="binary" StoreGeneratedPattern="Computed" Nullable="false" MaxLength="8" />
+    <Property Name="pcode" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="Expr1" Type="nvarchar" Nullable="false" MaxLength="200" />
     <Property Name="stok" Type="int" Nullable="false" />
-    <Property Name="Expr2" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Expr2" Type="nvarchar" Nullable="false" MaxLength="100" />
   </EntityType>
   <Association Name="FK_buy_product">
-    <End Role="product" Type="Self.product" Multiplicity="1" />
-    <End Role="buy" Type="Self.buy" Multiplicity="*" />
+    <End Role="product" Type="ProductManage1Model.Store.product" Multiplicity="1" />
+    <End Role="buy" Type="ProductManage1Model.Store.buy" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="product">
         <PropertyRef Name="id" />
@@ -156,8 +189,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_buy_supplier">
-    <End Role="supplier" Type="Self.supplier" Multiplicity="1" />
-    <End Role="buy" Type="Self.buy" Multiplicity="*" />
+    <End Role="supplier" Type="ProductManage1Model.Store.supplier" Multiplicity="1" />
+    <End Role="buy" Type="ProductManage1Model.Store.buy" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="supplier">
         <PropertyRef Name="id" />
@@ -168,8 +201,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_product_category">
-    <End Role="category" Type="Self.category" Multiplicity="0..1" />
-    <End Role="product" Type="Self.product" Multiplicity="*" />
+    <End Role="category" Type="ProductManage1Model.Store.category" Multiplicity="0..1" />
+    <End Role="product" Type="ProductManage1Model.Store.product" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="category">
         <PropertyRef Name="id" />
@@ -179,21 +212,9 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_product_maker">
-    <End Role="maker" Type="Self.maker" Multiplicity="1" />
-    <End Role="product" Type="Self.product" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="maker">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="product">
-        <PropertyRef Name="maker_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_sale_customer">
-    <End Role="customer" Type="Self.customer" Multiplicity="1" />
-    <End Role="sale" Type="Self.sale" Multiplicity="*" />
+    <End Role="customer" Type="ProductManage1Model.Store.customer" Multiplicity="1" />
+    <End Role="sale" Type="ProductManage1Model.Store.sale" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="customer">
         <PropertyRef Name="id" />
@@ -203,9 +224,21 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_product_maker">
+    <End Role="maker" Type="ProductManage1Model.Store.maker" Multiplicity="1" />
+    <End Role="product" Type="ProductManage1Model.Store.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="maker">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="product">
+        <PropertyRef Name="maker_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_sale_product">
-    <End Role="product" Type="Self.product" Multiplicity="1" />
-    <End Role="sale" Type="Self.sale" Multiplicity="*" />
+    <End Role="product" Type="ProductManage1Model.Store.product" Multiplicity="1" />
+    <End Role="sale" Type="ProductManage1Model.Store.sale" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="product">
         <PropertyRef Name="id" />
@@ -215,106 +248,4 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-    <Parameter Name="version" Type="int" Mode="In" />
-    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-  </Function>
-  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-    <Parameter Name="version" Type="int" Mode="In" />
-    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-  </Function>
-  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-  </Function>
-  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-  <EntityContainer Name="ProductManage1ModelStoreContainer">
-    <EntitySet Name="buy" EntityType="Self.buy" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="maker" EntityType="Self.maker" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="sale" EntityType="Self.sale" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="supplier" EntityType="Self.supplier" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Buy_View_1" EntityType="Self.Buy_View_1" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [Buy_View_1].[id] AS [id], 
-    [Buy_View_1].[value] AS [value], 
-    [Buy_View_1].[qnt] AS [qnt], 
-    [Buy_View_1].[date] AS [date], 
-    [Buy_View_1].[pcode] AS [pcode], 
-    [Buy_View_1].[name] AS [name], 
-    [Buy_View_1].[stok] AS [stok], 
-    [Buy_View_1].[Expr1] AS [Expr1], 
-    [Buy_View_1].[Expr2] AS [Expr2]
-    FROM [dbo].[Buy_View_1] AS [Buy_View_1]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="Product_View_1" EntityType="Self.Product_View_1" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [Product_View_1].[id] AS [id], 
-    [Product_View_1].[name] AS [name], 
-    [Product_View_1].[value] AS [value], 
-    [Product_View_1].[stok] AS [stok], 
-    [Product_View_1].[pcode] AS [pcode], 
-    [Product_View_1].[Expr1] AS [Expr1], 
-    [Product_View_1].[Expr2] AS [Expr2]
-    FROM [dbo].[Product_View_1] AS [Product_View_1]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="Sale_View_1" EntityType="Self.Sale_View_1" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [Sale_View_1].[id] AS [id], 
-    [Sale_View_1].[value] AS [value], 
-    [Sale_View_1].[qnt] AS [qnt], 
-    [Sale_View_1].[date] AS [date], 
-    [Sale_View_1].[pcode] AS [pcode], 
-    [Sale_View_1].[name] AS [name], 
-    [Sale_View_1].[Expr1] AS [Expr1], 
-    [Sale_View_1].[stok] AS [stok], 
-    [Sale_View_1].[Expr2] AS [Expr2]
-    FROM [dbo].[Sale_View_1] AS [Sale_View_1]</DefiningQuery>
-    </EntitySet>
-    <AssociationSet Name="FK_buy_product" Association="Self.FK_buy_product">
-      <End Role="product" EntitySet="product" />
-      <End Role="buy" EntitySet="buy" />
-    </AssociationSet>
-    <AssociationSet Name="FK_buy_supplier" Association="Self.FK_buy_supplier">
-      <End Role="supplier" EntitySet="supplier" />
-      <End Role="buy" EntitySet="buy" />
-    </AssociationSet>
-    <AssociationSet Name="FK_product_category" Association="Self.FK_product_category">
-      <End Role="category" EntitySet="category" />
-      <End Role="product" EntitySet="product" />
-    </AssociationSet>
-    <AssociationSet Name="FK_product_maker" Association="Self.FK_product_maker">
-      <End Role="maker" EntitySet="maker" />
-      <End Role="product" EntitySet="product" />
-    </AssociationSet>
-    <AssociationSet Name="FK_sale_customer" Association="Self.FK_sale_customer">
-      <End Role="customer" EntitySet="customer" />
-      <End Role="sale" EntitySet="sale" />
-    </AssociationSet>
-    <AssociationSet Name="FK_sale_product" Association="Self.FK_sale_product">
-      <End Role="product" EntitySet="product" />
-      <End Role="sale" EntitySet="sale" />
-    </AssociationSet>
-  </EntityContainer>
 </Schema>

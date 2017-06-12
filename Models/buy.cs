@@ -16,15 +16,16 @@ namespace WebApplicationTest3.Models
     public partial class buy
     {
         public int id { get; set; }
-
         public int product_id { get; set; }
         public int supplier_id { get; set; }
-
+        [Required]
         [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         [Display(Name = "仕入価格")]
         public decimal value { get; set; }
-        [Display(Name = "仕入数")]
+        [Required]
+        [Display(Name = "入荷数")]
         public int qnt { get; set; }
+        [Required]
         [Display(Name = "タイムスタンプ")]
         public System.DateTime date { get; set; }
     

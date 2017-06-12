@@ -22,12 +22,18 @@ namespace WebApplicationTest3.Models
         }
     
         public int id { get; set; }
-        [Display(Name = "メーカー名")]
+        [Required]
+        [Display(Name = "メーカー")]
         public string name { get; set; }
+        
         [Display(Name = "住所１")]
         public string address1 { get; set; }
+        
         [Display(Name = "電話番号")]
         public Nullable<int> TEL { get; set; }
+        
+        [Display(Name = "郵便番号")]
+        public Nullable<int> PostNo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<product> product { get; set; }

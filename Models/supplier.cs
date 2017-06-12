@@ -22,8 +22,10 @@ namespace WebApplicationTest3.Models
         }
     
         public int id { get; set; }
+        [Required]
         [Display(Name = "仕入先")]
         public string name { get; set; }
+        
         [Display(Name = "住所")]
         public string address { get; set; }
     

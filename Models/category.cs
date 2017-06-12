@@ -22,6 +22,7 @@ namespace WebApplicationTest3.Models
         }
     
         public int id { get; set; }
+        [Required]
         [Display(Name = "カテゴリー")]
         public string name { get; set; }
     

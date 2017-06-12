@@ -8,14 +8,24 @@
             @Html.ActionLink("商品リスト", "Index", "products", "", new { @class = "btn btn-default" })
         </th>
         <th>
+            @Html.ActionLink("入荷", "Index", "buys", "", new { @class = "btn btn-default" })
+        </th>
+        <th>
+            @Html.ActionLink("出荷", "Index", "sales", "", new { @class = "btn btn-default" })
+        </th>
+        <th>
             @Html.ActionLink("メーカー", "Index", "makers", "", new { @class = "btn btn-default" })
+        </th>
+        <th>
+            @Html.ActionLink("顧客", "Index", "customers", "", new { @class = "btn btn-default" })
+        </th>
+        <th>
+            @Html.ActionLink("仕入先", "Index", "suppliers", "", new { @class = "btn btn-default" })
         </th>
         <th>
             @Html.ActionLink("カテゴリー", "Index", "categories", "", new { @class = "btn btn-default" })
         </th>
-        <th>
-            @Html.ActionLink("入荷", "Index", "buys", "", new { @class = "btn btn-default" })
-        </th>
+
     </tr>
 </table>
 <br />

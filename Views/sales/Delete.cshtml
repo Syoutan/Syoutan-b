@@ -1,4 +1,4 @@
-﻿@model WebApplicationTest3.Models.buy
+﻿@model WebApplicationTest3.Models.sale
 
 @{
     ViewBag.Title = "Delete";
@@ -8,7 +8,7 @@
 
 <h3>削除していいですか?</h3>
 <div>
-    <h4>入荷</h4>
+    <h4>出荷</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -18,21 +18,27 @@
         <dd>
             @Html.DisplayFor(model => model.product.pcode)
         </dd>
-
         <dt>
-           @Html.DisplayNameFor(model => model.product.name)
+            @Html.DisplayNameFor(model => model.product.name)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.product.name)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.supplier.name)
+            @Html.DisplayNameFor(model => model.product.stok)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.supplier.name)
+            @Html.DisplayFor(model => model.product.stok)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.customer.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.customer.name)
         </dd>
 
         <dt>
