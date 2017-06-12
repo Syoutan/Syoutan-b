@@ -50,9 +50,16 @@ namespace WebApplicationTest3.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.maker.Add(maker);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.maker.Add(maker);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
             }
 
             return View(maker);
@@ -82,9 +89,16 @@ namespace WebApplicationTest3.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(maker).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(maker).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
             }
             return View(maker);
         }
@@ -109,10 +123,17 @@ namespace WebApplicationTest3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            maker maker = db.maker.Find(id);
-            db.maker.Remove(maker);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                maker maker = db.maker.Find(id);
+                db.maker.Remove(maker);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch(Exception e)
+            {
+                return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+            }
         }
 
         protected override void Dispose(bool disposing)

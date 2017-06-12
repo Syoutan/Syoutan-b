@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplicationTest3.Models;
 
+
 namespace WebApplicationTest3.Controllers
 {
     public class productsController : Controller
@@ -53,9 +54,16 @@ namespace WebApplicationTest3.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.product.Add(product);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.product.Add(product);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
             }
 
             ViewBag.category_id = new SelectList(db.category, "id", "name", product.category_id);
@@ -89,9 +97,16 @@ namespace WebApplicationTest3.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(product).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
             }
             ViewBag.category_id = new SelectList(db.category, "id", "name", product.category_id);
             ViewBag.maker_id = new SelectList(db.maker, "id", "name", product.maker_id);
@@ -118,10 +133,17 @@ namespace WebApplicationTest3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            product product = db.product.Find(id);
-            db.product.Remove(product);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                product product = db.product.Find(id);
+                db.product.Remove(product);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch(Exception e)
+            {
+                return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+            }
         }
 
         protected override void Dispose(bool disposing)

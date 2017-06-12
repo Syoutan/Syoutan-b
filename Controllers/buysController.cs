@@ -92,10 +92,10 @@ namespace WebApplicationTest3.Controllers
                             }
                             return RedirectToAction("Index");
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
                             tran.Rollback();
-                            throw; 
+                            return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
                         }
                 }
 
@@ -223,10 +223,10 @@ namespace WebApplicationTest3.Controllers
                         }
                         return RedirectToAction("Index"); ;
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         tran.Rollback();
-                        throw;
+                        return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
                     }
                 }
             }

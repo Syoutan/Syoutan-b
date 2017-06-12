@@ -50,9 +50,16 @@ namespace WebApplicationTest3.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.customer.Add(customer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.customer.Add(customer);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
             }
 
             return View(customer);
@@ -82,9 +89,16 @@ namespace WebApplicationTest3.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(customer).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(customer).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
             }
             return View(customer);
         }
@@ -109,10 +123,17 @@ namespace WebApplicationTest3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            customer customer = db.customer.Find(id);
-            db.customer.Remove(customer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                customer customer = db.customer.Find(id);
+                db.customer.Remove(customer);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch(Exception e)
+            {
+                return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+            }
         }
 
         protected override void Dispose(bool disposing)

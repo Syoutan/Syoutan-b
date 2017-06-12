@@ -112,3 +112,4 @@ D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplication
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\ja\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\Debug\WebApplicationTest3.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\Debug\WebApplicationTest3.pdb
+D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\Debug\WebApplicationTest3.csprojResolveAssemblyReference.cache
