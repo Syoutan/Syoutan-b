@@ -7,7 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplicationTest3.Models;
-
+using PagedList;
+using System.Data.Entity.Infrastructure;
 
 namespace WebApplicationTest3.Controllers
 {
@@ -16,10 +17,33 @@ namespace WebApplicationTest3.Controllers
         private ProductManage1Entities1 db = new ProductManage1Entities1();
 
         // GET: products
-        public ActionResult Index()
+        [Route("~/products")]
+        [Route("~/products/index")]
+        [Route("~/products/page{page}")]
+        public ActionResult Index(int? page)
         {
-            var product = db.product.Include(p => p.category).Include(p => p.maker);
-            return View(product.ToList());
+            int pageNumber = page ?? 1;
+            if (pageNumber < 1) pageNumber = 1;
+            int pageSize = 10;
+
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "なし");
+            foreach(maker m in db.maker)
+            {
+                dic1.Add(m.id, m.name);
+            }
+            Dictionary<int, string> dic2 = new Dictionary<int, string>();
+            dic2.Add(0, "なし");
+            foreach (category m in db.category)
+            {
+                dic2.Add(m.id, m.name);
+            }
+            ViewBag.category_id = new SelectList(dic2,"Key","Value");
+            ViewBag.maker_id = new SelectList(dic1, "Key","Value" );
+
+            var pd = db.product.Include(p => p.category).Include(p => p.maker);
+            IPagedList<product> products = pd.OrderBy(p => p.id).ToPagedList(pageNumber, pageSize);
+            return View(products);
         }
 
         // GET: products/Details/5
@@ -60,7 +84,11 @@ namespace WebApplicationTest3.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                catch(Exception e)
+                catch(DbUpdateException e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
+                catch (Exception e)
                 {
                     return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
                 }
@@ -103,7 +131,11 @@ namespace WebApplicationTest3.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                catch(Exception e)
+                catch (DbUpdateException e)
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+                }
+                catch (Exception e)
                 {
                     return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
                 }
@@ -140,7 +172,11 @@ namespace WebApplicationTest3.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch (DbUpdateException e)
+            {
+                return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+            }
+            catch (Exception e)
             {
                 return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
             }

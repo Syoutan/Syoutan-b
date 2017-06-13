@@ -1,62 +1,93 @@
-﻿@model IEnumerable<WebApplicationTest3.Models.product>
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<WebApplicationTest3.Models.product>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>商品リスト</h2>
+    <h2>商品リスト</h2>
 
-<p>
-    @Html.ActionLink("新規作成", "Create", "", new { @class = "btn btn-default" })
-</p>
-<table class="table">
-    <tr>
-        <th>
-            <h4>商品コード</h4>
-        </th>
-        <th>
-            <h4>商品名</h4>
-        </th>
-        <th>
-            <h4>標準販売価格</h4>
-        </th>
-        <th>
-            <h4>在庫数</h4>
-        </th>
-        <th>
-            <h4>メーカー名</h4>
-        </th>
-        <th>
-            <h4>カテゴリー</h4>
-        </th>
-         <th></th>
-    </tr>
+    
+        <div class="col-lg-2 col-md-2 col-sm-3">
+            <div class="list-group">
+@using (Html.BeginForm())
+{
+    <p>メーカー： @Html.DropDownList("maker_id", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+    <p>カテゴリー： @Html.DropDownList("category_id", null, htmlAttributes: new { @class = "form-control" }) </p>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.pcode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.stok)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.maker.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.category.name)
-        </td>
-        <td>
-            @Html.ActionLink("編集", "Edit", new { id=item.id }) |
-            @Html.ActionLink("削除", "Delete", new { id=item.id })
-        </td>
-    </tr>
+    <input type="submit" value="Select" class="btn btn-default" />
+
 }
+            </div>
+        </div>
+    
 
-</table>
+
+<div class="col-lg-10 col-md-10 col-sm-11">
+    <p>
+        @Html.ActionLink("新規作成", "Create", "", new { @class = "btn btn-default" })
+    </p>
+    <table class="table table-striped">
+        <tr>
+            <th>
+                <h4>商品コード</h4>
+            </th>
+            <th>
+                <h4>商品名</h4>
+            </th>
+            <th>
+                <h4>標準販売価格</h4>
+            </th>
+            <th>
+                <h4>在庫数</h4>
+            </th>
+            <th>
+                <h4>メーカー名</h4>
+            </th>
+            <th>
+                <h4>カテゴリー</h4>
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.pcode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.stok)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.maker.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.category.name)
+                </td>
+                <td>
+                    @Html.ActionLink("編集", "Edit", new { id = item.id }) |
+                    @Html.ActionLink("削除", "Delete", new { id = item.id })
+                </td>
+            </tr>
+        }
+    </table>
+
+    <!-- 現在のページ情報 -->
+    <div>
+        Page: @Model.PageNumber / @Model.PageCount
+    </div>
+
+    <!-- ページ選択用リンク -->
+    <div>
+        @Html.PagedListPager(Model, page => Url.Action("page" + page, "products"))
+    </div>
+</div>
+
+<div class="clearboth"></div>

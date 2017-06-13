@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplicationTest3.Models;
+using PagedList;
+using System.Data.Entity.Infrastructure;
 
 namespace WebApplicationTest3.Controllers
 {
@@ -16,10 +18,19 @@ namespace WebApplicationTest3.Controllers
         private ProductManage1Entities1 db = new ProductManage1Entities1();
 
         // GET: sales
-        public ActionResult Index()
+        [Route("~/sales")]
+        [Route("~/sales/index")]
+        [Route("~/sales/page{page}")]
+        public ActionResult Index(int? page)
         {
-            var sale = db.sale.Include(s => s.customer).Include(s => s.product);
-            return View(sale.ToList());
+            int pageNumber = page ?? 1;
+            if (pageNumber < 1) pageNumber = 1;
+            int pageSize = 10;
+
+            //var sale = db.sale.Include(s => s.customer).Include(s => s.product);
+
+            IPagedList<sale> sales = db.sale.Include(s => s.customer).Include(s => s.product).OrderBy(p => p.id).ToPagedList(pageNumber, pageSize);
+            return View(sales);
         }
 
         // GET: sales/Details/5
