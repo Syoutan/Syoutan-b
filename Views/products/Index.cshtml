@@ -8,18 +8,19 @@
     <h2>商品リスト</h2>
 
     
-        <div class="col-lg-2 col-md-2 col-sm-3">
-            <div class="list-group">
-@using (Html.BeginForm())
+<div class="col-lg-2 col-md-2 col-sm-3">
+    <div class="list-group">
+@using (Html.BeginForm("Select","products"))
 {
+    <p>商品コード： @Html.TextBox("pcode",null, new { @class = "form-control"}) </p>
     <p>メーカー： @Html.DropDownList("maker_id", null, htmlAttributes: new { @class = "form-control" }) </p>　　
     <p>カテゴリー： @Html.DropDownList("category_id", null, htmlAttributes: new { @class = "form-control" }) </p>
 
-    <input type="submit" value="Select" class="btn btn-default" />
+    <input type="submit" value="選択" class="btn btn-default" />
 
 }
-            </div>
-        </div>
+     </div>
+</div>
     
 
 

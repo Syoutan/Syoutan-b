@@ -15,6 +15,73 @@ namespace WebApplicationTest3.Controllers
     public class productsController : Controller
     {
         private ProductManage1Entities1 db = new ProductManage1Entities1();
+        static private string _pcode="";
+        static private int _maker_id = 0;
+        static private int _category_id = 0;
+
+
+        //Create Maker SelectList
+        private SelectList GetMakerSelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "なし");
+            foreach (maker m in db.maker)
+            {
+                dic1.Add(m.id, m.name);
+            }
+            return new SelectList(dic1, "Key", "Value", productsController._maker_id.ToString());
+        }
+
+        //Create Category SelectList
+        private SelectList GetCategorySelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "なし");
+            foreach (category c in db.category)
+            {
+                dic1.Add(c.id, c.name);
+            }            
+            return new SelectList(dic1, "Key", "Value", productsController._category_id.ToString());
+        }
+
+        // GET: products/Select
+        public ActionResult Select(string pcode,string maker_id, string category_id)
+        {
+            productsController._pcode = pcode;
+            try
+            {
+                productsController._maker_id = int.Parse(maker_id);
+                productsController._category_id = int.Parse(category_id);
+            }
+            catch(Exception e)
+            {
+                productsController._maker_id = 0;
+                productsController._category_id = 0;
+                return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
+            }
+
+            return RedirectToAction("Index",new { page = 1 });
+        }
+
+        //Get Index Select Item
+        public IQueryable<product> GetSelectedItemList()
+        {
+            var pd = db.product.Include(p => p.category).Include(p => p.maker);
+            if(productsController._pcode.Length > 0)
+            {
+                pd = pd.Where(x => x.pcode.StartsWith(productsController._pcode));
+            }
+            if (productsController._maker_id > 0)
+            {
+                pd = pd.Where(x => x.maker_id == productsController._maker_id);
+            }
+            if (productsController._category_id > 0)
+            {
+                pd = pd.Where(x => x.category_id == productsController._category_id);
+            }
+
+            return pd;
+        }
 
         // GET: products
         [Route("~/products")]
@@ -22,27 +89,17 @@ namespace WebApplicationTest3.Controllers
         [Route("~/products/page{page}")]
         public ActionResult Index(int? page)
         {
+            if(page == null) { productsController._pcode = ""; productsController._maker_id = 0; productsController._category_id = 0; }
             int pageNumber = page ?? 1;
             if (pageNumber < 1) pageNumber = 1;
             int pageSize = 10;
 
-            Dictionary<int, string> dic1 = new Dictionary<int, string>();
-            dic1.Add(0, "なし");
-            foreach(maker m in db.maker)
-            {
-                dic1.Add(m.id, m.name);
-            }
-            Dictionary<int, string> dic2 = new Dictionary<int, string>();
-            dic2.Add(0, "なし");
-            foreach (category m in db.category)
-            {
-                dic2.Add(m.id, m.name);
-            }
-            ViewBag.category_id = new SelectList(dic2,"Key","Value");
-            ViewBag.maker_id = new SelectList(dic1, "Key","Value" );
+            ViewBag.category_id = GetCategorySelectList();
+            ViewBag.maker_id = GetMakerSelectList();
+            ViewBag.pcode = productsController._pcode;
+            var pd = GetSelectedItemList();
 
-            var pd = db.product.Include(p => p.category).Include(p => p.maker);
-            IPagedList<product> products = pd.OrderBy(p => p.id).ToPagedList(pageNumber, pageSize);
+            IPagedList<product> products = pd.OrderBy(p => p.pcode).ToPagedList(pageNumber, pageSize);
             return View(products);
         }
 
@@ -82,7 +139,7 @@ namespace WebApplicationTest3.Controllers
                 {
                     db.product.Add(product);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index",new { page = 1 });
                 }
                 catch(DbUpdateException e)
                 {
@@ -129,7 +186,7 @@ namespace WebApplicationTest3.Controllers
                 {
                     db.Entry(product).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index",new { page = 1 });
                 }
                 catch (DbUpdateException e)
                 {
@@ -170,7 +227,7 @@ namespace WebApplicationTest3.Controllers
                 product product = db.product.Find(id);
                 db.product.Remove(product);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",new { page = 1 });
             }
             catch (DbUpdateException e)
             {

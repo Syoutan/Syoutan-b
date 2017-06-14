@@ -66,7 +66,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="削除" class="btn btn-default" /> |
-            @Html.ActionLink("削除しないでリストへ", "Index", "", new { @class = "btn btn-default" })
+            @Html.ActionLink("削除しないでリストへ", "Index", new { page = 1 }, new { @class = "btn btn-default" })
         </div>
     }
 </div>

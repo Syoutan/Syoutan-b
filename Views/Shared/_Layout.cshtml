@@ -25,8 +25,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("ホーム", "Index", "Home")</li>
-                    <li>@Html.ActionLink("詳細", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡先", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("商品リスト", "Index", "products")</li>
+                    <li>@Html.ActionLink("入荷", "Index", "buys")</li>
+                    <li>@Html.ActionLink("出荷", "Index", "sales")</li>
+                    <li>@Html.ActionLink("メーカー", "Index", "makers")</li>
+                    <li>@Html.ActionLink("顧客", "Index", "customers")</li>
+                    <li>@Html.ActionLink("仕入先", "Index", "suppliers")</li>
+                    <li>@Html.ActionLink("カテゴリー", "Index", "categories")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
