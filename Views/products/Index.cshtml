@@ -10,11 +10,16 @@
     
 <div class="col-lg-2 col-md-2 col-sm-3">
     <div class="list-group">
-@using (Html.BeginForm("Select","products"))
+@using (Html.BeginForm("Select", "products"))
 {
+    @Html.AntiForgeryToken()
+
     <p>商品コード： @Html.TextBox("pcode",null, new { @class = "form-control"}) </p>
+    <p>商品名： @Html.TextBox("name", null, new { @class = "form-control" }) </p>
     <p>メーカー： @Html.DropDownList("maker_id", null, htmlAttributes: new { @class = "form-control" }) </p>　　
     <p>カテゴリー： @Html.DropDownList("category_id", null, htmlAttributes: new { @class = "form-control" }) </p>
+    <p>価格帯： @Html.DropDownList("value1", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+    <p>～ @Html.DropDownList("value2", null, htmlAttributes: new { @class = "form-control" }) </p>
 
     <input type="submit" value="選択" class="btn btn-default" />
 
@@ -31,22 +36,22 @@
     <table class="table table-striped">
         <tr>
             <th>
-                <h4>商品コード</h4>
+                <h5>商品コード</h5>
             </th>
             <th>
-                <h4>商品名</h4>
+                <h5>商品名</h5>
             </th>
             <th>
-                <h4>標準販売価格</h4>
+                <h5>標準販売価格</h5>
             </th>
             <th>
-                <h4>在庫数</h4>
+                <h5>在庫数</h5>
             </th>
             <th>
-                <h4>メーカー名</h4>
+                <h5>メーカー名</h5>
             </th>
             <th>
-                <h4>カテゴリー</h4>
+                <h5>カテゴリー</h5>
             </th>
             <th></th>
         </tr>
@@ -74,7 +79,9 @@
                 </td>
                 <td>
                     @Html.ActionLink("編集", "Edit", new { id = item.id }) |
-                    @Html.ActionLink("削除", "Delete", new { id = item.id })
+                    @Html.ActionLink("削除", "Delete", new { id = item.id }) <br />
+                    @Html.ActionLink("入荷", "Create1","buys", new { id = item.id },null) |
+                    @Html.ActionLink("出荷", "Create1","sales", new { id = item.id },null)
                 </td>
             </tr>
         }

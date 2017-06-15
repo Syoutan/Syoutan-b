@@ -22,6 +22,82 @@ namespace WebApplicationTest3.Controllers
     public class buysController : Controller
     {
         private ProductManage1Entities1 db = new ProductManage1Entities1();
+        static private int _year = 0;
+        static private int _month = 0;
+        static private int _day = 0;
+
+        //Create Year SelectList
+        private SelectList GetYearSelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "");
+            foreach (int y  in Enumerable.Range(2000,51))
+            {
+                dic1.Add(y, y.ToString());
+            }
+            return new SelectList(dic1, "Key", "Value",buysController._year);
+        }
+
+        //Create Month SelectList
+        private SelectList GetMonthSelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "");
+            foreach (int y in Enumerable.Range(1, 12))
+            {
+                dic1.Add(y, y.ToString());
+            }
+            return new SelectList(dic1, "Key", "Value", buysController._month);
+        }
+
+        //Create Day SelectList
+        private SelectList GetDaySelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "");
+            foreach (int y in Enumerable.Range(1, 31))
+            {
+                dic1.Add(y, y.ToString());
+            }
+            return new SelectList(dic1, "Key", "Value", buysController._day);
+        }
+
+        //Get Index Select Item
+        public IQueryable<buy> GetSelectedItemList()
+        {
+            var pd = db.buy.Include(b => b.product).Include(b => b.supplier);
+            if (buysController._year > 0 && buysController._month > 0 && buysController._day > 0)
+            {
+                DateTime dt = DateTime.Parse(buysController._year.ToString() + "/" + buysController._month.ToString() + "/" + buysController._day.ToString());
+                pd = pd.Where(x => x.date.Year == dt.Year);
+                pd = pd.Where(x => x.date.Month == dt.Month);
+                pd = pd.Where(x => x.date.Day == dt.Day);
+            }
+            else if (buysController._year > 0 && buysController._month > 0 && buysController._day == 0)
+            {
+                DateTime dt = DateTime.Parse(buysController._year.ToString() + "/" + buysController._month.ToString() + "/" + "01");
+                pd = pd.Where(x => x.date.Year == dt.Year);
+                pd = pd.Where(x => x.date.Month == dt.Month);
+            }
+            else if (buysController._year > 0 && buysController._month == 0 && buysController._day == 0)
+            {
+                DateTime dt = DateTime.Parse(buysController._year.ToString() + "/" + "01" + "/" + "01");
+                pd = pd.Where(x => x.date.Year == dt.Year);
+            }
+
+            return pd;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Select(string year, string month, string day )
+        {
+            buysController._year = int.Parse(year);
+            buysController._month = int.Parse(month);
+            buysController._day = int.Parse(day);
+
+            return RedirectToAction("Index", new { page = 1 });
+        }
 
         // GET: buys
         [Route("~/buys")]
@@ -29,12 +105,20 @@ namespace WebApplicationTest3.Controllers
         [Route("~/buys/page{page}")]
         public ActionResult Index(int? page)
         {
+            if (page == null)
+            {
+                buysController._year = 0;buysController._month = 0;buysController._day = 0;
+            }
             int pageNumber = page ?? 1;
             if (pageNumber < 1) pageNumber = 1;
             int pageSize = 10;
+            ViewBag.year = GetYearSelectList();
+            ViewBag.month = GetMonthSelectList();
+            ViewBag.day = GetDaySelectList();
 
-            //var buy = db.buy.Include(b => b.product).Include(b => b.supplier).OrderBy(b=> b.id);
-            IPagedList<buy> buys = db.buy.Include(b => b.product).Include(b => b.supplier).OrderBy(p => p.id).ToPagedList(pageNumber, pageSize);
+            var buy = GetSelectedItemList();
+
+            IPagedList<buy> buys = buy.OrderByDescending(p => p.id).ToPagedList(pageNumber, pageSize);
             return View(buys);
         }
 
@@ -64,12 +148,35 @@ namespace WebApplicationTest3.Controllers
             return Json(rpd, JsonRequestBehavior.AllowGet);
         }
 
-
-            // GET: buys/Create
-            public ActionResult Create()
+        // GET: buys/Create1
+        public ActionResult Create1(int? id)
         {
-            ViewBag.product_id = new SelectList(db.product, "id", "pcode");
-            ViewBag.supplier_id = new SelectList(db.supplier, "id", "name");
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var product = db.product.Find(id);
+            if (product == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ViewBag.product_id = product.id;
+            ViewBag.pcode = product.pcode;
+            ViewBag.pname = product.name;
+            ViewBag.stok = product.stok;
+            ViewBag.pvalue = product.value;
+            ViewBag.supplier_id = new SelectList(db.supplier.OrderBy(x => x.name), "id", "name");
+
+            return View();
+        }
+
+
+        // GET: buys/Create
+        public ActionResult Create()
+        {
+            ViewBag.product_id = new SelectList(db.product.OrderBy(x=>x.pcode), "id", "pcode");
+            ViewBag.supplier_id = new SelectList(db.supplier.OrderBy(x=>x.name), "id", "name");
             return View();
         }
 
@@ -78,14 +185,16 @@ namespace WebApplicationTest3.Controllers
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,product_id,supplier_id,value,qnt,date")] buy buy)
+        public ActionResult Create([Bind(Include = "id,product_id,supplier_id,value,qnt")] buy buy)
         {
             if (ModelState.IsValid)
             {
+                DateTime dt = DateTime.Now;
+                buy.date = dt;
                 using (var tran = db.Database.BeginTransaction())
                 {
-                        try
-                        {
+                    try
+                    {
                             product p = db.product.Find(buy.product_id);
                             if (p == null)
                             {
@@ -131,9 +240,9 @@ namespace WebApplicationTest3.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.product_id = new SelectList(db.product.OrderBy(x => x.pcode), "id", "pcode", buy.product_id);
+            ViewBag.supplier_id = new SelectList(db.supplier.OrderBy(x => x.name), "id", "name", buy.supplier_id);
 
-            ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
-            ViewBag.supplier_id = new SelectList(db.supplier, "id", "name", buy.supplier_id);
             return View(buy);
         }
 

@@ -16,6 +16,84 @@ namespace WebApplicationTest3.Controllers
     public class salesController : Controller
     {
         private ProductManage1Entities1 db = new ProductManage1Entities1();
+        static private int _year = 0;
+        static private int _month = 0;
+        static private int _day = 0;
+
+        //Create Year SelectList
+        private SelectList GetYearSelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "");
+            foreach (int y in Enumerable.Range(2000, 51))
+            {
+                dic1.Add(y, y.ToString());
+            }
+            return new SelectList(dic1, "Key", "Value", salesController._year);
+        }
+
+        //Create Month SelectList
+        private SelectList GetMonthSelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "");
+            foreach (int y in Enumerable.Range(1, 12))
+            {
+                dic1.Add(y, y.ToString());
+            }
+            return new SelectList(dic1, "Key", "Value", salesController._month);
+        }
+
+        //Create Day SelectList
+        private SelectList GetDaySelectList()
+        {
+            Dictionary<int, string> dic1 = new Dictionary<int, string>();
+            dic1.Add(0, "");
+            foreach (int y in Enumerable.Range(1, 31))
+            {
+                dic1.Add(y, y.ToString());
+            }
+            return new SelectList(dic1, "Key", "Value", salesController._day);
+        }
+
+        //Get Index Select Item
+        public IQueryable<sale> GetSelectedItemList()
+        {
+            var pd = db.sale.Include(s => s.customer).Include(s => s.product);
+            if (salesController._year > 0 && salesController._month > 0 && salesController._day > 0)
+            {
+                DateTime dt = DateTime.Parse(salesController._year.ToString() + "/" + salesController._month.ToString() + "/" + salesController._day.ToString());
+                pd = pd.Where(x => x.date.Year == dt.Year);
+                pd = pd.Where(x => x.date.Month == dt.Month);
+                pd = pd.Where(x => x.date.Day == dt.Day);
+            }
+            else if (salesController._year > 0 && salesController._month > 0 && salesController._day == 0)
+            {
+                DateTime dt = DateTime.Parse(salesController._year.ToString() + "/" + salesController._month.ToString() + "/" + "01");
+                pd = pd.Where(x => x.date.Year == dt.Year);
+                pd = pd.Where(x => x.date.Month == dt.Month);
+            }
+            else if (salesController._year > 0 && salesController._month == 0 && salesController._day == 0)
+            {
+                DateTime dt = DateTime.Parse(salesController._year.ToString() + "/" + "01" + "/" + "01");
+                pd = pd.Where(x => x.date.Year == dt.Year);
+            }
+
+            return pd;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Select(string year, string month, string day)
+        {
+            salesController._year = int.Parse(year);
+            salesController._month = int.Parse(month);
+            salesController._day = int.Parse(day);
+
+            return RedirectToAction("Index", new { page = 1 });
+        }
+
+
 
         // GET: sales
         [Route("~/sales")]
@@ -23,13 +101,22 @@ namespace WebApplicationTest3.Controllers
         [Route("~/sales/page{page}")]
         public ActionResult Index(int? page)
         {
+            if (page == null)
+            {
+                salesController._year = 0; salesController._month = 0; salesController._day = 0;
+            }
+
             int pageNumber = page ?? 1;
             if (pageNumber < 1) pageNumber = 1;
             int pageSize = 10;
 
-            //var sale = db.sale.Include(s => s.customer).Include(s => s.product);
+            ViewBag.year = GetYearSelectList();
+            ViewBag.month = GetMonthSelectList();
+            ViewBag.day = GetDaySelectList();
 
-            IPagedList<sale> sales = db.sale.Include(s => s.customer).Include(s => s.product).OrderBy(p => p.id).ToPagedList(pageNumber, pageSize);
+            var sale = GetSelectedItemList();
+
+            IPagedList<sale> sales = sale.OrderByDescending(p => p.id).ToPagedList(pageNumber, pageSize);
             return View(sales);
         }
 
@@ -60,11 +147,35 @@ namespace WebApplicationTest3.Controllers
         }
 
 
+        // GET: sales/Create1
+        public ActionResult Create1(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var product = db.product.Find(id);
+            if (product == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ViewBag.product_id = product.id;
+            ViewBag.pcode = product.pcode;
+            ViewBag.pname = product.name;
+            ViewBag.stok = product.stok;
+            ViewBag.pvalue = product.value;
+            ViewBag.customer_id = new SelectList(db.customer.OrderBy(x => x.name), "id", "name");
+
+            return View();
+        }
+
+
         // GET: sales/Create
         public ActionResult Create()
         {
-            ViewBag.customer_id = new SelectList(db.customer, "id", "name");
-            ViewBag.product_id = new SelectList(db.product, "id", "pcode");
+            ViewBag.customer_id = new SelectList(db.customer.OrderBy(x=>x.name), "id", "name");
+            ViewBag.product_id = new SelectList(db.product.OrderBy(x=>x.pcode), "id", "pcode");
             return View();
         }
 
@@ -73,7 +184,7 @@ namespace WebApplicationTest3.Controllers
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,product_id,customer_id,value,qnt,date")] sale sale)
+        public ActionResult Create([Bind(Include = "id,product_id,customer_id,value,qnt")] sale sale)
         {
             /*
             if (ModelState.IsValid)

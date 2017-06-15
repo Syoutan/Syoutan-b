@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ProfitManagement1ModelStoreContainer" CdmEntityContainer="ProfitManagement1Entities2">
+    <EntitySetMapping Name="ProfitView1">
+      <EntityTypeMapping TypeName="ProfitManagement1Model.ProfitView1">
+        <MappingFragment StoreEntitySet="ProfitView1">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="qnt" ColumnName="qnt" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="pname" ColumnName="pname" />
+          <ScalarProperty Name="sname" ColumnName="sname" />
+          <ScalarProperty Name="pcode" ColumnName="pcode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
