@@ -4,8 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8b22be3ccc3240c2a1b234361293d117" Name="Diagram1">
-        <EntityTypeShape EntityType="ProfitManagement1Model.ProfitView1" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="71c7318bfe034f25a1e973db7544d924" Name="Diagram1">
+        <EntityTypeShape EntityType="ProfitManagement1Model.invoice" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfitManagement1Model.invoice_detail" Width="1.5" PointX="5.875" PointY="2.125" IsExpanded="true" />
+        <AssociationConnector Association="ProfitManagement1Model.FK_invoice_detail_invoice" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

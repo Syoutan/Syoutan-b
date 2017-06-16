@@ -1,0 +1,82 @@
+﻿@model IEnumerable<WebApplicationTest3.Models.invoice_detail>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>請求表示</h2>
+<div class="col-lg-2 col-md-2 col-sm-3">
+    <div class="list-group">
+        @using (Html.BeginForm("Index", "invoice_detail"))
+        {
+            @Html.AntiForgeryToken()
+            <p>顧客： @Html.DropDownList("customer_id", null, htmlAttributes: new { @class = "form-control" }) </p>
+            <p>年： @Html.DropDownList("iyear", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+            <p>月： @Html.DropDownList("imonth", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+
+             <input type="submit" value="選択" class="btn btn-default" />
+        }
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.pcode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qnt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.small_sum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sale_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.invoice.cname)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.pcode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.pname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qnt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.small_sum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sale_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.invoice.cname)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.invoice_detail_no }) |
+            @Html.ActionLink("Details", "Details", new { id=item.invoice_detail_no }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.invoice_detail_no })
+        </td>
+    </tr>
+}
+
+</table>

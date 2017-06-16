@@ -13,10 +13,10 @@ namespace WebApplicationTest3.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ProfitManagement1Entities2 : DbContext
+    public partial class ProfitManagement1Entities4 : DbContext
     {
-        public ProfitManagement1Entities2()
-            : base("name=ProfitManagement1Entities2")
+        public ProfitManagement1Entities4()
+            : base("name=ProfitManagement1Entities4")
         {
         }
     
@@ -25,6 +25,7 @@ namespace WebApplicationTest3.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<ProfitView1> ProfitView1 { get; set; }
+        public virtual DbSet<invoice> invoice { get; set; }
+        public virtual DbSet<invoice_detail> invoice_detail { get; set; }
     }
 }

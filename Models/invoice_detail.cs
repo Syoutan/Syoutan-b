@@ -12,14 +12,18 @@ namespace WebApplicationTest3.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProfitView1
+    public partial class invoice_detail
     {
-        public int id { get; set; }
-        public decimal value { get; set; }
-        public int qnt { get; set; }
-        public System.DateTime date { get; set; }
-        public string pname { get; set; }
-        public string sname { get; set; }
+        public int invoice_detail_no { get; set; }
         public string pcode { get; set; }
+        public string pname { get; set; }
+        public int qnt { get; set; }
+        public decimal value { get; set; }
+        public decimal small_sum { get; set; }
+        public int invoice_id { get; set; }
+        public int sale_id { get; set; }
+        public System.DateTime date { get; set; }
+    
+        public virtual invoice invoice { get; set; }
     }
 }

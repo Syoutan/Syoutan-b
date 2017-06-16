@@ -26,6 +26,12 @@
         <th>
             @Html.ActionLink("カテゴリー", "Index", "categories", "", new { @class = "btn btn-default" })
         </th>
+        <th>
+            @Html.ActionLink("請求作成", "Create", "invoice_detail", "", new { @class = "btn btn-default" })
+        </th>
+        <th>
+            @Html.ActionLink("請求表示", "Index", "invoice_detail", "", new { @class = "btn btn-default" })
+        </th>
 
     </tr>
 </table>

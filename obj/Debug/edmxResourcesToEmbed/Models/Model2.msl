@@ -1,16 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="ProfitManagement1ModelStoreContainer" CdmEntityContainer="ProfitManagement1Entities2">
-    <EntitySetMapping Name="ProfitView1">
-      <EntityTypeMapping TypeName="ProfitManagement1Model.ProfitView1">
-        <MappingFragment StoreEntitySet="ProfitView1">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="value" ColumnName="value" />
-          <ScalarProperty Name="qnt" ColumnName="qnt" />
+  <EntityContainerMapping StorageEntityContainer="ProfitManagement1ModelStoreContainer" CdmEntityContainer="ProfitManagement1Entities4">
+    <EntitySetMapping Name="invoice">
+      <EntityTypeMapping TypeName="ProfitManagement1Model.invoice">
+        <MappingFragment StoreEntitySet="invoice">
+          <ScalarProperty Name="invoice_no" ColumnName="invoice_no" />
+          <ScalarProperty Name="customer_id" ColumnName="customer_id" />
           <ScalarProperty Name="date" ColumnName="date" />
-          <ScalarProperty Name="pname" ColumnName="pname" />
-          <ScalarProperty Name="sname" ColumnName="sname" />
+          <ScalarProperty Name="charge" ColumnName="charge" />
+          <ScalarProperty Name="tax" ColumnName="tax" />
+          <ScalarProperty Name="cname" ColumnName="cname" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="invoice_detail">
+      <EntityTypeMapping TypeName="ProfitManagement1Model.invoice_detail">
+        <MappingFragment StoreEntitySet="invoice_detail">
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="sale_id" ColumnName="sale_id" />
+          <ScalarProperty Name="invoice_detail_no" ColumnName="invoice_detail_no" />
           <ScalarProperty Name="pcode" ColumnName="pcode" />
+          <ScalarProperty Name="pname" ColumnName="pname" />
+          <ScalarProperty Name="qnt" ColumnName="qnt" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="small_sum" ColumnName="small_sum" />
+          <ScalarProperty Name="invoice_id" ColumnName="invoice_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
