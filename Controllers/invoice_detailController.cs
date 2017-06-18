@@ -7,6 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplicationTest3.Models;
+using System.Diagnostics;
+using System.Drawing.Printing;
+using TuesPechkin;
 
 namespace WebApplicationTest3.Controllers
 {
@@ -14,45 +17,46 @@ namespace WebApplicationTest3.Controllers
     {
         private ProfitManagement1Entities4 db = new ProfitManagement1Entities4();
         private ProductManage1Entities1 db2 = new ProductManage1Entities1();
+        static private int _year= DateTime.Now.Year;
+        static private int _month = DateTime.Now.Month;
+        static private int _customer_id = 0;
+
 
         //Create Year SelectList
         private SelectList GetYearSelectList()
         {
             Dictionary<int, string> dic1 = new Dictionary<int, string>();
-            dic1.Add(0, "");
             foreach (int y in Enumerable.Range(2000, 51))
             {
                 dic1.Add(y, y.ToString());
             }
-            return new SelectList(dic1, "Key", "Value", (int)DateTime.Now.Year);
+            return new SelectList(dic1, "Key", "Value", invoice_detailController._year);
         }
 
         //Create Month SelectList
         private SelectList GetMonthSelectList()
         {
             Dictionary<int, string> dic1 = new Dictionary<int, string>();
-            dic1.Add(0, "");
             foreach (int y in Enumerable.Range(1, 12))
             {
                 dic1.Add(y, y.ToString());
             }
-            return new SelectList(dic1, "Key", "Value", (int)DateTime.Now.Month);
+            return new SelectList(dic1, "Key", "Value", invoice_detailController._month);
         }
 
         //Create Customer SelectList
         private SelectList GetCustomerSelectList()
         {
             Dictionary<int, string> dic1 = new Dictionary<int, string>();
-            dic1.Add(0, "なし");
             var cut = db2.customer.OrderBy(x => x.name);
             foreach (customer c in cut)
             {
                 dic1.Add(c.id, c.name);
             }
-            return new SelectList(dic1, "Key", "Value", 0);
+            return new SelectList(dic1, "Key", "Value", invoice_detailController._customer_id);
         }
 
-        public bool NoWDelete(int iyear,int imonth)
+        private bool NoWDelete(int iyear,int imonth)
         {
             using (var tran1 = db.Database.BeginTransaction())
             {
@@ -89,27 +93,38 @@ namespace WebApplicationTest3.Controllers
             return true;
         }
 
-        public bool NowCreate(int iyear, int imonth)
+        private bool CreateInvoice(DbContextTransaction tran1,DbContextTransaction tran2, int iyear, int imonth)
+        {
+            try
+            {
+                DateTime dt = new DateTime(iyear, imonth, 1);
+                var customers = db2.customer;
+                foreach (customer cu in customers)
+                {
+                    invoice ninv = new invoice() { customer_id = cu.id, date = dt.Date, cname = cu.name };
+                    db.invoice.Add(ninv);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                tran1.Rollback();
+                tran2.Rollback();
+                return false;
+            }
+
+            return true;
+        }
+  
+        private bool NowCreate(int iyear, int imonth)
         {
             using (var tran1 = db.Database.BeginTransaction())
             {
                 using (var tran2 = db2.Database.BeginTransaction())
                 {
-                    try
+
+                    if (CreateInvoice(tran1, tran2, iyear, imonth) == false)
                     {
-                        DateTime dt = new DateTime(iyear, imonth, 1);
-                        var customers = db2.customer;
-                        foreach (customer cu in customers)
-                        {
-                            invoice ninv = new invoice() { customer_id = cu.id, date = dt.Date, cname = cu.name };
-                            db.invoice.Add(ninv);
-                            db.SaveChanges();
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                        tran1.Rollback();
-                        tran2.Rollback();
                         return false;
                     }
                     try
@@ -118,13 +133,25 @@ namespace WebApplicationTest3.Controllers
                         foreach (var sales in salesl)
                         {
                             var prd = db2.product.Find(sales.product_id);
-                            var inv = db.invoice.Where(x => x.customer_id == sales.customer_id).Where(x=>x.date.Year == iyear).Where(x=>x.date.Month == imonth).First();
-                            invoice_detail ninvd = new invoice_detail() { sale_id = sales.id, invoice_id = inv.invoice_no, pcode = prd.pcode, pname = prd.name, qnt = sales.qnt, value = sales.value, small_sum = sales.value * sales.qnt,date=sales.date.Date };
+                            var inv = db.invoice.Where(x => x.customer_id == sales.customer_id).Where(x => x.date.Year == iyear).Where(x => x.date.Month == imonth).First();
+                            invoice_detail ninvd = new invoice_detail() { sale_id = sales.id, invoice_id = inv.invoice_no, pcode = prd.pcode, pname = prd.name, qnt = sales.qnt, value = sales.value, small_sum = sales.value * sales.qnt, date = sales.date.Date };
                             db.invoice_detail.Add(ninvd);
+                            db.SaveChanges();
+                        }
+
+                        var invd = db.invoice_detail.Where(x => x.date.Year == iyear).Where(x => x.date.Month == imonth);
+                        var invdg = invd.GroupBy(a => a.invoice_id).Select(a => new { invoice_id = a.Key, vulue = a.Sum(b => b.small_sum) });
+
+                        foreach (var invl in invdg)
+                        {
+                            var invoice1 = db.invoice.Find(invl.invoice_id);
+                            invoice1.charge = invl.vulue;
+                            invoice1.tax = invl.vulue * 0.08m;
                             db.SaveChanges();
                         }
                         tran1.Commit();
                         tran2.Commit();
+
                         return true;
                     }
                     catch (Exception e)
@@ -139,20 +166,94 @@ namespace WebApplicationTest3.Controllers
 
         }
 
+        public ActionResult CreatePdf()
+        {
+            var helper = new UrlHelper(ControllerContext.RequestContext);
+            var indexUrl = helper.Action("IndexPDF", "invoice_detail", null, Request.Url.Scheme);
+
+            var document = new HtmlToPdfDocument()
+            {
+                GlobalSettings =
+                {
+                    ProduceOutline = true,
+                    DocumentTitle = "PDF Sample",
+                    PaperSize = PaperKind.A4Rotated,
+                    Margins =
+                    {
+                        All = 1.375,
+                        Unit = Unit.Centimeters
+                    }
+                },
+                Objects =
+                {
+                    new ObjectSettings() {
+                        PageUrl = indexUrl,
+                    },
+                }
+            };
+
+            var converter = new StandardConverter(
+                new PdfToolset(
+                    new Win32EmbeddedDeployment(
+                        new TempFolderDeployment()
+                    )
+                )
+            );
+
+            var pdfData = converter.Convert(document);
+
+            return File(pdfData, "application/pdf", "PdfSample.pdf");
+        }
+
+        public ActionResult IndexPDF()
+        {
+            try
+            {
+                var inv = db.invoice.Where(x => x.customer_id == invoice_detailController._customer_id).
+                    Where(x => x.date.Year == invoice_detailController._year).
+                    Where(x => x.date.Month == invoice_detailController._month).First();
+                var invoice_detail = db.invoice_detail.Include(p => p.invoice).Where(x => x.invoice_id == inv.invoice_no);
+                ViewBag.customer_id = GetCustomerSelectList();
+                ViewBag.iyear = GetYearSelectList();
+                ViewBag.imonth = GetMonthSelectList();
+                ViewBag.ym = inv.date.Year.ToString() + "年　" + inv.date.Month.ToString() + "月度";
+                ViewBag.cname = inv.cname;
+                decimal chr = inv.charge ?? 0;
+                decimal ta = inv.tax ?? 0;
+                ViewBag.charge = chr.ToString("c");
+                ViewBag.tax = ta.ToString("c");
+                ViewBag.all = (chr + ta).ToString("c");
+                return View("IndexPDF", "_LayoutPdf", invoice_detail.ToList());
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("DeleteUserSuccess", "Home", new { message = "表示エラー：検索データがない可能性があります" });
+            }
+        }
+
 
         // GET: invoice_detail
         public ActionResult Index(int? customer_id,int? iyear,int? imonth)
         {
             try
             {
-                customer_id = customer_id ?? db.invoice.First().customer_id;
-                iyear = iyear ?? DateTime.Now.Year;
-                imonth = imonth ?? DateTime.Now.Month;
-                var inv = db.invoice.Where(x => x.customer_id == customer_id).Where(x => x.date.Year == iyear).Where(x => x.date.Month == imonth).First();
-                var invoice_detail = db.invoice_detail.Where(x => x.invoice_id == inv.invoice_no);
+                invoice_detailController._customer_id = customer_id ?? db.invoice.First().customer_id;
+                invoice_detailController._year = iyear ?? DateTime.Now.Year;
+                invoice_detailController._month = imonth ?? DateTime.Now.Month;
+                var inv = db.invoice.Where(x => x.customer_id == invoice_detailController._customer_id).
+                    Where(x => x.date.Year == invoice_detailController._year).
+                    Where(x => x.date.Month == invoice_detailController._month).First();
+                var invoice_detail = db.invoice_detail.Include(p => p.invoice).Where(x => x.invoice_id == inv.invoice_no);
                 ViewBag.customer_id = GetCustomerSelectList();
                 ViewBag.iyear = GetYearSelectList();
                 ViewBag.imonth = GetMonthSelectList();
+                ViewBag.ym = inv.date.Year.ToString() + "年　" + inv.date.Month.ToString() + "月度";
+                ViewBag.cname = inv.cname;
+                decimal chr = inv.charge ?? 0;
+                decimal ta = inv.tax ?? 0;
+                ViewBag.charge = chr.ToString("c");
+                ViewBag.tax = ta.ToString("c");
+                ViewBag.all = (chr + ta).ToString("c");
                 return View(invoice_detail.ToList());
             }
             catch(Exception e)

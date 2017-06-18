@@ -11,7 +11,8 @@ namespace WebApplicationTest3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class invoice
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,7 +24,9 @@ namespace WebApplicationTest3.Models
         public int invoice_no { get; set; }
         public int customer_id { get; set; }
         public System.DateTime date { get; set; }
+        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         public Nullable<decimal> charge { get; set; }
+        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         public Nullable<decimal> tax { get; set; }
         public string cname { get; set; }
     

@@ -5,20 +5,6 @@
 }
 
 <h2>請求表示</h2>
-<div class="col-lg-2 col-md-2 col-sm-3">
-    <div class="list-group">
-        @using (Html.BeginForm("Index", "invoice_detail"))
-        {
-            @Html.AntiForgeryToken()
-            <p>顧客： @Html.DropDownList("customer_id", null, htmlAttributes: new { @class = "form-control" }) </p>
-            <p>年： @Html.DropDownList("iyear", null, htmlAttributes: new { @class = "form-control" }) </p>　　
-            <p>月： @Html.DropDownList("imonth", null, htmlAttributes: new { @class = "form-control" }) </p>　　
-
-             <input type="submit" value="選択" class="btn btn-default" />
-        }
-    </div>
-</div>
-
 <div class="col-lg-5 col-md-5 col-sm-6">
     <table class=" table">
         <tr>
@@ -28,6 +14,8 @@
             <th>
                 <h5>客先名</h5>
             </th>
+            <th>　　　　　　　　　　　　　　　　</th>
+            <th>XXXXX販売会社</th>
         </tr>
         <tr>
             <td>
@@ -36,6 +24,8 @@
             <td>
                 <h5>@ViewBag.cname</h5>
             </td>
+           <td>　　　　　　　　　　　　　　　　</td>
+            <td>住所：ｘｘ県ｘｘ市</td>
         </tr>
     </table>
     <br />
@@ -59,7 +49,7 @@
                 <h5 align="center">販売価格</h5>
             </th>
             <th>
-                <h5 align="center" >小計</h5align="center">
+                <h5 align="center">小計</h5>
             </th>
         </tr>
 
@@ -112,7 +102,5 @@
         </tr>
     </table>
 </div>
-<p>
-@Html.ActionLink("PDF", "CreatePdf", "invoice_detail", "", new { @class = "btn btn-default" })
- </p>
+
 <div class="clearboth"></div>

@@ -11,17 +11,21 @@ namespace WebApplicationTest3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class invoice_detail
     {
         public int invoice_detail_no { get; set; }
         public string pcode { get; set; }
         public string pname { get; set; }
         public int qnt { get; set; }
+        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         public decimal value { get; set; }
+        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         public decimal small_sum { get; set; }
         public int invoice_id { get; set; }
         public int sale_id { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public System.DateTime date { get; set; }
     
         public virtual invoice invoice { get; set; }

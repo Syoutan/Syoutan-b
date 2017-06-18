@@ -72,6 +72,15 @@ namespace WebApplicationTest3.Controllers
             {
                 return View(model);
             }
+            var user = await UserManager.FindAsync(model.Email, model.Password);
+            if (user != null)
+            {
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    ModelState.AddModelError("", "最初は届いたE-Mailからログインが必要です!");
+                    return View(model);
+                }
+            }
 
             // これは、アカウント ロックアウトの基準となるログイン失敗回数を数えません。
             // パスワード入力失敗回数に基づいてアカウントがロックアウトされるように設定するには、shouldLockout: true に変更してください。
