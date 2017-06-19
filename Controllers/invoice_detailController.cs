@@ -177,7 +177,7 @@ namespace WebApplicationTest3.Controllers
                 {
                     ProduceOutline = true,
                     DocumentTitle = "PDF Sample",
-                    PaperSize = PaperKind.A4Rotated,
+                    PaperSize = PaperKind.A4,
                     Margins =
                     {
                         All = 1.375,
