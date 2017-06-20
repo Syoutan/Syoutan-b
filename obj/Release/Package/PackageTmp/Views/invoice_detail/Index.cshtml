@@ -1,0 +1,118 @@
+﻿@model IEnumerable<WebApplicationTest3.Models.invoice_detail>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>請求表示</h2>
+<div class="col-lg-2 col-md-2 col-sm-3">
+    <div class="list-group">
+        @using (Html.BeginForm("Index", "invoice_detail"))
+        {
+            @Html.AntiForgeryToken()
+            <p>顧客： @Html.DropDownList("customer_id", null, htmlAttributes: new { @class = "form-control" }) </p>
+            <p>年： @Html.DropDownList("iyear", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+            <p>月： @Html.DropDownList("imonth", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+
+             <input type="submit" value="選択" class="btn btn-default" />
+        }
+    </div>
+</div>
+
+<div class="col-lg-5 col-md-5 col-sm-6">
+    <table class=" table">
+        <tr>
+            <th>
+                <h5>日付</h5>
+            </th>
+            <th>
+                <h5>客先名</h5>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <h5>@ViewBag.ym</h5>
+            </td>
+            <td>
+                <h5>@ViewBag.cname</h5>
+            </td>
+        </tr>
+    </table>
+    <br />
+</div>
+<div class="col-lg-10 col-md-10 col-sm-11">
+    <table class="table table-striped">
+        <tr>
+            <th>
+                <h5>商品コード</h5>
+            </th>
+            <th>
+                <h5>商品名</h5>
+            </th>
+            <th>
+                <h5>出荷日</h5>
+            </th>
+            <th>
+                <h5 align="center">出荷数</h5>
+            </th>
+            <th>
+                <h5 align="center">販売価格</h5>
+            </th>
+            <th>
+                <h5 align="center" >小計</h5align="center">
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.pcode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.pname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.date)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.qnt)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.value)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.small_sum)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td align="right">税抜き合計</td>
+            <td align="right"> @ViewBag.charge </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td align="right">税</td>
+            <td align="right"> @ViewBag.tax </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td align="right">合計</td>
+            <td align="right"> @ViewBag.all </td>
+        </tr>
+    </table>
+</div>
+<p>
+@Html.ActionLink("PDF", "CreatePdf", "invoice_detail", "", new { @class = "btn btn-default" })
+ </p>
+<div class="clearboth"></div>

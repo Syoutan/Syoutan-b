@@ -17,10 +17,6 @@ namespace WebApplicationTest3.Controllers
     {
         private ProfitManagement1Entities4 db = new ProfitManagement1Entities4();
         private ProductManage1Entities1 db2 = new ProductManage1Entities1();
-        static private int _year= DateTime.Now.Year;
-        static private int _month = DateTime.Now.Month;
-        static private int _customer_id = 0;
-
 
         //Create Year SelectList
         private SelectList GetYearSelectList()
@@ -30,7 +26,7 @@ namespace WebApplicationTest3.Controllers
             {
                 dic1.Add(y, y.ToString());
             }
-            return new SelectList(dic1, "Key", "Value", invoice_detailController._year);
+            return new SelectList(dic1, "Key", "Value", (int)Session["iyear"]);
         }
 
         //Create Month SelectList
@@ -41,7 +37,7 @@ namespace WebApplicationTest3.Controllers
             {
                 dic1.Add(y, y.ToString());
             }
-            return new SelectList(dic1, "Key", "Value", invoice_detailController._month);
+            return new SelectList(dic1, "Key", "Value", (int)Session["imonth"]);
         }
 
         //Create Customer SelectList
@@ -53,7 +49,7 @@ namespace WebApplicationTest3.Controllers
             {
                 dic1.Add(c.id, c.name);
             }
-            return new SelectList(dic1, "Key", "Value", invoice_detailController._customer_id);
+            return new SelectList(dic1, "Key", "Value", (int)Session["icustomer_id"]);
         }
 
         private bool NoWDelete(int iyear,int imonth)
@@ -168,8 +164,12 @@ namespace WebApplicationTest3.Controllers
 
         public ActionResult CreatePdf()
         {
+            int i_customer_id = (int)Session["icustomer_id"];
+            int i_year = (int)Session["iyear"];
+            int i_month = (int)Session["imonth"];
+
             var helper = new UrlHelper(ControllerContext.RequestContext);
-            var indexUrl = helper.Action("IndexPDF", "invoice_detail", null, Request.Url.Scheme);
+            var indexUrl = helper.Action("IndexPDF", "invoice_detail", new { i_customer_id = i_customer_id , i_year=i_year,i_month=i_month }, Request.Url.Scheme);
 
             var document = new HtmlToPdfDocument()
             {
@@ -205,17 +205,15 @@ namespace WebApplicationTest3.Controllers
             return File(pdfData, "application/pdf", "PdfSample.pdf");
         }
 
-        public ActionResult IndexPDF()
+        [HttpGet]
+        public ActionResult IndexPDF(int i_customer_id,int i_year,int i_month)
         {
             try
             {
-                var inv = db.invoice.Where(x => x.customer_id == invoice_detailController._customer_id).
-                    Where(x => x.date.Year == invoice_detailController._year).
-                    Where(x => x.date.Month == invoice_detailController._month).First();
+                var inv = db.invoice.Where(x => x.customer_id == i_customer_id).
+                    Where(x => x.date.Year == i_year).
+                    Where(x => x.date.Month == i_month).First();
                 var invoice_detail = db.invoice_detail.Include(p => p.invoice).Where(x => x.invoice_id == inv.invoice_no);
-                ViewBag.customer_id = GetCustomerSelectList();
-                ViewBag.iyear = GetYearSelectList();
-                ViewBag.imonth = GetMonthSelectList();
                 ViewBag.ym = inv.date.Year.ToString() + "年　" + inv.date.Month.ToString() + "月度";
                 ViewBag.cname = inv.cname;
                 decimal chr = inv.charge ?? 0;
@@ -223,6 +221,7 @@ namespace WebApplicationTest3.Controllers
                 ViewBag.charge = chr.ToString("c");
                 ViewBag.tax = ta.ToString("c");
                 ViewBag.all = (chr + ta).ToString("c");
+                ViewBag.barcode = String.Format("{0:D13}", inv.invoice_no);
                 return View("IndexPDF", "_LayoutPdf", invoice_detail.ToList());
             }
             catch (Exception e)
@@ -237,12 +236,16 @@ namespace WebApplicationTest3.Controllers
         {
             try
             {
-                invoice_detailController._customer_id = customer_id ?? db.invoice.First().customer_id;
-                invoice_detailController._year = iyear ?? DateTime.Now.Year;
-                invoice_detailController._month = imonth ?? DateTime.Now.Month;
-                var inv = db.invoice.Where(x => x.customer_id == invoice_detailController._customer_id).
-                    Where(x => x.date.Year == invoice_detailController._year).
-                    Where(x => x.date.Month == invoice_detailController._month).First();
+                Session["icustomer_id"] = customer_id ?? db.invoice.First().customer_id;
+                Session["iyear"] = iyear ?? DateTime.Now.Year;
+                Session["imonth"] = imonth ?? DateTime.Now.Month;
+                int i_cuustomer_id = (int)Session["icustomer_id"];
+                int i_year = (int)Session["iyear"];
+                int i_month = (int)Session["imonth"];
+
+                var inv = db.invoice.Where(x => x.customer_id == i_cuustomer_id).
+                    Where(x => x.date.Year == i_year).
+                    Where(x => x.date.Month == i_month).First();
                 var invoice_detail = db.invoice_detail.Include(p => p.invoice).Where(x => x.invoice_id == inv.invoice_no);
                 ViewBag.customer_id = GetCustomerSelectList();
                 ViewBag.iyear = GetYearSelectList();
@@ -280,6 +283,9 @@ namespace WebApplicationTest3.Controllers
         // GET: invoice_detail/Create
         public ActionResult Create()
         {
+            Session["iyear"] = DateTime.Now.Year;
+            Session["imonth"] = DateTime.Now.Month;
+            Session["icustomer_id"] = 0;
             ViewBag.year = GetYearSelectList();
             ViewBag.month = GetMonthSelectList();
 

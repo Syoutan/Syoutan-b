@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>最新顧客別請求作成</h2>
+
+<div class="col-lg-2 col-md-2 col-sm-3">
+    <div class="list-group">
+        @using (Html.BeginForm("Create", "invoice_detail"))
+        {
+            @Html.AntiForgeryToken()
+            <p>年： @Html.DropDownList("year", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+            <p>月： @Html.DropDownList("month", null, htmlAttributes: new { @class = "form-control" }) </p>　　
+            <input type="submit" value="選択" class="btn btn-default" />
+
+        }
+    </div>
+</div>

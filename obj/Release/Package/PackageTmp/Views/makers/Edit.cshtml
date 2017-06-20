@@ -1,0 +1,90 @@
+﻿@model WebApplicationTest3.Models.maker
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<script>
+    $(function () {
+        $('#AdBtn').click(function (e) {
+            var pn = $("#PostNo").val();
+            AjaxZip3.zip2addr("PostNo","","address1", "address1");
+        });
+    });
+</script>
+
+
+<h2>編集</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>メーカー</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <table class="tb1">
+            <tr>
+                <th class="th1">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.PostNo, new { @class = "col-md-2 control-label" })
+
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.PostNo, new { @class = "form-control", maxlength = "7" })
+                        </div>
+                    </div>
+                </th>
+                <th class="th2">
+
+                </th>
+            </tr>
+            <tr>
+                <td class="td1">
+                    <div class="col-md-10">
+                        <input type="button" value="住所検索" id="AdBtn" class="btn btn-default">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.address1, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.address1, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.address1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TEL, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TEL, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TEL, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="編集" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("編集しないでリストへ", "Index", "", new { @class = "btn btn-default" })
+</div>

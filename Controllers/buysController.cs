@@ -22,9 +22,6 @@ namespace WebApplicationTest3.Controllers
     public class buysController : Controller
     {
         private ProductManage1Entities1 db = new ProductManage1Entities1();
-        static private int _year = 0;
-        static private int _month = 0;
-        static private int _day = 0;
 
         //Create Year SelectList
         private SelectList GetYearSelectList()
@@ -35,7 +32,7 @@ namespace WebApplicationTest3.Controllers
             {
                 dic1.Add(y, y.ToString());
             }
-            return new SelectList(dic1, "Key", "Value",buysController._year);
+            return new SelectList(dic1, "Key", "Value",Session["byear"]);
         }
 
         //Create Month SelectList
@@ -47,7 +44,7 @@ namespace WebApplicationTest3.Controllers
             {
                 dic1.Add(y, y.ToString());
             }
-            return new SelectList(dic1, "Key", "Value", buysController._month);
+            return new SelectList(dic1, "Key", "Value", Session["bmonth"]);
         }
 
         //Create Day SelectList
@@ -59,29 +56,29 @@ namespace WebApplicationTest3.Controllers
             {
                 dic1.Add(y, y.ToString());
             }
-            return new SelectList(dic1, "Key", "Value", buysController._day);
+            return new SelectList(dic1, "Key", "Value", Session["bday"]);
         }
 
         //Get Index Select Item
         public IQueryable<buy> GetSelectedItemList()
         {
             var pd = db.buy.Include(b => b.product).Include(b => b.supplier);
-            if (buysController._year > 0 && buysController._month > 0 && buysController._day > 0)
+            if ((int)Session["byear"] > 0 && (int)Session["bmonth"] > 0 && (int)Session["bday"] > 0)
             {
-                DateTime dt = DateTime.Parse(buysController._year.ToString() + "/" + buysController._month.ToString() + "/" + buysController._day.ToString());
+                DateTime dt = DateTime.Parse(((int)Session["byear"]).ToString() + " / " + ((int)Session["bmonth"]).ToString() + "/" + ((int)Session["bday"]).ToString());
                 pd = pd.Where(x => x.date.Year == dt.Year);
                 pd = pd.Where(x => x.date.Month == dt.Month);
                 pd = pd.Where(x => x.date.Day == dt.Day);
             }
-            else if (buysController._year > 0 && buysController._month > 0 && buysController._day == 0)
+            else if ((int)Session["byear"] > 0 && (int)Session["bmonth"] > 0 && (int)Session["bday"] == 0)
             {
-                DateTime dt = DateTime.Parse(buysController._year.ToString() + "/" + buysController._month.ToString() + "/" + "01");
+                DateTime dt = DateTime.Parse(((int)Session["byear"]).ToString() + "/" + ((int)Session["bmonth"]).ToString() + "/" + "01");
                 pd = pd.Where(x => x.date.Year == dt.Year);
                 pd = pd.Where(x => x.date.Month == dt.Month);
             }
-            else if (buysController._year > 0 && buysController._month == 0 && buysController._day == 0)
+            else if ((int)Session["byear"] > 0 && (int)Session["bmonth"] == 0 && (int)Session["bday"] == 0)
             {
-                DateTime dt = DateTime.Parse(buysController._year.ToString() + "/" + "01" + "/" + "01");
+                DateTime dt = DateTime.Parse(((int)Session["byear"]).ToString() + "/" + "01" + "/" + "01");
                 pd = pd.Where(x => x.date.Year == dt.Year);
             }
 
@@ -92,9 +89,9 @@ namespace WebApplicationTest3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Select(string year, string month, string day )
         {
-            buysController._year = int.Parse(year);
-            buysController._month = int.Parse(month);
-            buysController._day = int.Parse(day);
+            Session["byear"] = int.Parse(year);
+            Session["bmonth"] = int.Parse(month);
+            Session["bday"] = int.Parse(day);
 
             return RedirectToAction("Index", new { page = 1 });
         }
@@ -107,7 +104,7 @@ namespace WebApplicationTest3.Controllers
         {
             if (page == null)
             {
-                buysController._year = 0;buysController._month = 0;buysController._day = 0;
+                Session["byear"] = 0; Session["bmonth"] = 0; Session["bday"] = 0;
             }
             int pageNumber = page ?? 1;
             if (pageNumber < 1) pageNumber = 1;

@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 商品管理アプリケーション</title>
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/StyleSheet1.css" rel="stylesheet"/>
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("商品管理", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("ホーム", "Index", "Home")</li>
+                    <li>@Html.ActionLink("商品リスト", "Index", "products")</li>
+                    <li>@Html.ActionLink("入荷", "Index", "buys")</li>
+                    <li>@Html.ActionLink("出荷", "Index", "sales")</li>
+                    <li>@Html.ActionLink("メーカー", "Index", "makers")</li>
+                    <li>@Html.ActionLink("顧客", "Index", "customers")</li>
+                    <li>@Html.ActionLink("仕入先", "Index", "suppliers")</li>
+                    <li>@Html.ActionLink("カテゴリー", "Index", "categories")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - 商品管理アプリケーション</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

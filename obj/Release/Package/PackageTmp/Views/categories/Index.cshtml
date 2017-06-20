@@ -1,0 +1,31 @@
+﻿@model IEnumerable<WebApplicationTest3.Models.category>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>カテゴリーリスト</h2>
+
+<p>
+    @Html.ActionLink("新規作成", "Create", "", new { @class = "btn btn-default" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.ActionLink("削除", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

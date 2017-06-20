@@ -1,33 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="ProfitManagement1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <!--生成中に見つかったエラー:
-警告 6002: テーブル/ビュー 'ProfitManagement1 .dbo.ProfitView1' には主キーが定義されていません。主キーは推論され、定義は読み取り専用のテーブル/ビューとして作成されました。-->
-  <EntityType Name="ProfitView1">
+  <EntityType Name="invoice">
     <Key>
-      <PropertyRef Name="id" />
-      <PropertyRef Name="value" />
-      <PropertyRef Name="qnt" />
-      <PropertyRef Name="date" />
+      <PropertyRef Name="invoice_no" />
     </Key>
-    <Property Name="id" Type="int" Nullable="false" />
-    <Property Name="value" Type="money" Nullable="false" />
-    <Property Name="qnt" Type="int" Nullable="false" />
-    <Property Name="date" Type="datetime" Nullable="false" />
-    <Property Name="pname" Type="nvarchar" MaxLength="100" />
-    <Property Name="sname" Type="nvarchar" MaxLength="100" />
-    <Property Name="pcode" Type="nvarchar" MaxLength="50" />
+    <Property Name="invoice_no" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="customer_id" Type="int" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="charge" Type="money" />
+    <Property Name="tax" Type="money" />
+    <Property Name="cname" Type="nvarchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <EntityType Name="invoice_detail">
+    <Key>
+      <PropertyRef Name="invoice_detail_no" />
+    </Key>
+    <Property Name="invoice_detail_no" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="sale_id" Type="int" Nullable="false" />
+    <Property Name="pcode" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="pname" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="qnt" Type="int" Nullable="false" />
+    <Property Name="value" Type="money" Nullable="false" />
+    <Property Name="small_sum" Type="money" Nullable="false" />
+    <Property Name="invoice_id" Type="int" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_invoice_detail_invoice">
+    <End Role="invoice" Type="Self.invoice" Multiplicity="1" />
+    <End Role="invoice_detail" Type="Self.invoice_detail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="invoice">
+        <PropertyRef Name="invoice_no" />
+      </Principal>
+      <Dependent Role="invoice_detail">
+        <PropertyRef Name="invoice_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="ProfitManagement1ModelStoreContainer">
-    <EntitySet Name="ProfitView1" EntityType="Self.ProfitView1" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [ProfitView1].[id] AS [id], 
-    [ProfitView1].[value] AS [value], 
-    [ProfitView1].[qnt] AS [qnt], 
-    [ProfitView1].[date] AS [date], 
-    [ProfitView1].[pname] AS [pname], 
-    [ProfitView1].[sname] AS [sname], 
-    [ProfitView1].[pcode] AS [pcode]
-    FROM [dbo].[ProfitView1] AS [ProfitView1]</DefiningQuery>
-    </EntitySet>
+    <EntitySet Name="invoice" EntityType="Self.invoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="invoice_detail" EntityType="Self.invoice_detail" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_invoice_detail_invoice" Association="Self.FK_invoice_detail_invoice">
+      <End Role="invoice" EntitySet="invoice" />
+      <End Role="invoice_detail" EntitySet="invoice_detail" />
+    </AssociationSet>
   </EntityContainer>
 </Schema>

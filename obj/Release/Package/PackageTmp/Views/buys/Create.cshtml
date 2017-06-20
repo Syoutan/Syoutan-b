@@ -1,0 +1,120 @@
+﻿@model WebApplicationTest3.Models.buy
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>新規作成</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>入荷</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.product.pcode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("product_id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.product_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.product.name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("Default", "", htmlAttributes: new { @class = "form-control", id = "PName", Readonly = true })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.product.stok,htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("Default", "", htmlAttributes: new { @class = "form-control", id = "PStok", Readonly = true })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.product.value, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("Default", "", htmlAttributes: new { @class = "form-control", id = "PValue", Readonly = true })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.supplier.name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("supplier_id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.supplier_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.value, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.value, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.value, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.qnt, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.qnt, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.qnt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+<!--
+        <div class="form-group">
+            @Html.LabelFor(model => model.date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+-->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="新規作成" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("作成しないでリストへ", "Index", "", new { @class = "btn btn-default" })
+</div>
+
+<!--<script src="/Scripts/MyJavaScript1.js"></script>-->
+<script>
+$(function () {
+    $(function () {
+        var val = $("#product_id").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetProducts")',
+            dataType: 'json',
+            data: { id: $("#product_id").val() },
+            success: function (data) {
+                $('#PName').val(data['PName']);
+                $('#PStok').val(data['PStok']);
+                $('#PValue').val(data['PValue']);
+            }
+        });
+    });
+
+    $("#product_id").change(function () {
+        var val = $("#product_id").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetProducts")',
+            dataType: 'json',
+            data: { id: $("#product_id").val() },
+            success: function (data) {
+                $('#PName').val(data['PName']);
+                $('#PStok').val(data['PStok']);
+                $('#PValue').val(data['PValue']);
+            }
+        });
+    });
+});
+
+</script>

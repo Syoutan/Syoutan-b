@@ -120,4 +120,3 @@ D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplication
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\RazorPDF.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\TuesPechkin.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\TuesPechkin.Wkhtmltox.Win32.dll
-D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\Debug\WebApplicationTest3.csprojResolveAssemblyReference.cache

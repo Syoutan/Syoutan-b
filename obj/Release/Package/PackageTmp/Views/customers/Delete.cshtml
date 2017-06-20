@@ -1,0 +1,48 @@
+﻿@model WebApplicationTest3.Models.customer
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>削除</h2>
+
+<h3>削除していいですか?</h3>
+<div>
+    <h4>顧客</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mailaddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mailaddress)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="削除" class="btn btn-default" /> |
+            @Html.ActionLink("削除しないでリストへ", "Index", "", new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

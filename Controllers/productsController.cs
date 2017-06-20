@@ -15,12 +15,6 @@ namespace WebApplicationTest3.Controllers
     public class productsController : Controller
     {
         private ProductManage1Entities1 db = new ProductManage1Entities1();
-        static private string _pcode="";
-        static private string _name = "";
-        static private int _maker_id = 0;
-        static private int _category_id = 0;
-        static private decimal _value1 = 0;
-        static private decimal _value2 = 0;
 
 
         //Create Maker SelectList
@@ -33,7 +27,7 @@ namespace WebApplicationTest3.Controllers
             {
                 dic1.Add(m.id, m.name);
             }
-            return new SelectList(dic1, "Key", "Value", productsController._maker_id.ToString());
+            return new SelectList(dic1, "Key", "Value", ((int)Session["maker_id"]).ToString());
         }
 
         //Create Category SelectList
@@ -45,8 +39,8 @@ namespace WebApplicationTest3.Controllers
             foreach (category c in cgs)
             {
                 dic1.Add(c.id, c.name);
-            }            
-            return new SelectList(dic1, "Key", "Value", productsController._category_id.ToString());
+            }
+            return new SelectList(dic1, "Key", "Value", ((int)Session["category_id"]).ToString());
         }
 
         //Create Value1 SelectList
@@ -55,7 +49,7 @@ namespace WebApplicationTest3.Controllers
             Dictionary<decimal, string> dic1 = new Dictionary<decimal, string>(){
                 { 0,"0" },{ 10000, "10000" },{ 50000,"50000" }, { 100000,"100000" },{ 200000,"200000" },{ 300000,"300000" }};
 
-            return new SelectList(dic1, "Key", "Value", productsController._value1.ToString());
+            return new SelectList(dic1, "Key", "Value", ((decimal)Session["value1"]).ToString());
         }
         //Create Value2 SelectList
         private SelectList GetValue2List()
@@ -63,7 +57,7 @@ namespace WebApplicationTest3.Controllers
             Dictionary<decimal, string> dic1 = new Dictionary<decimal, string>(){
                 { 0,"" },{ 10000, "10000" },{ 50000,"50000" }, { 100000,"100000" },{ 200000,"200000" },{ 300000,"300000" },{ 500000,"500000" }};
 
-            return new SelectList(dic1, "Key", "Value", productsController._value2.ToString());
+            return new SelectList(dic1, "Key", "Value", ((decimal)Session["value2"]).ToString());
         }
 
 
@@ -73,21 +67,21 @@ namespace WebApplicationTest3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Select(string pcode,string name,string maker_id, string category_id,string value1,string value2)
         {
-            productsController._pcode = pcode;
-            productsController._name = name;
+            Session["pcode"] = pcode;
+            Session["name"] = name;
             try
             {
-                productsController._maker_id = int.Parse(maker_id);
-                productsController._category_id = int.Parse(category_id);
-                productsController._value1 = decimal.Parse(value1);
-                productsController._value2 = decimal.Parse(value2);
+                Session["maker_id"] = int.Parse(maker_id);
+                Session["category_id"] = int.Parse(category_id);
+                Session["value1"] = decimal.Parse(value1);
+                Session["value2"] = decimal.Parse(value2);
             }
             catch(Exception e)
             {
-                productsController._maker_id = 0;
-                productsController._category_id = 0;
-                productsController._value1 = 0;
-                productsController._value2 = 0;
+                Session["maker_id"] = 0;
+                Session["category_id"] = 0;
+                Session["value1"] = 0;
+                Session["value2"] = 0;
 
                 return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
             }
@@ -98,32 +92,37 @@ namespace WebApplicationTest3.Controllers
         //Get Index Select Item
         public IQueryable<product> GetSelectedItemList()
         {
-            var pd = db.product.Include(p => p.category).Include(p => p.maker);
-            if(productsController._pcode.Length > 0)
+            IQueryable<product> pd = db.product.Include(p => p.category).Include(p => p.maker);
+            if(((string)Session["pcode"]).Length > 0)
             {
-                pd = pd.Where(x => x.pcode.StartsWith(productsController._pcode));
+                string pcode = (string)Session["pcode"];
+                pd = pd.Where(x => x.pcode.StartsWith(pcode));
             }
-            if (productsController._name.Length > 0)
+            if (((string)Session["name"]).Length > 0)
             {
-                pd = pd.Where(x => x.name.Contains(productsController._name));
+                string name = (string)Session["name"];
+                pd = pd.Where(x => x.name.Contains(name));
             }
-            if (productsController._maker_id > 0)
+            if ((int)Session["maker_id"] > 0)
             {
-                pd = pd.Where(x => x.maker_id == productsController._maker_id);
+                int mid = (int)Session["maker_id"];
+                pd = pd.Where(x => x.maker_id == mid);
             }
-            if (productsController._category_id > 0)
+            if ((int)Session["category_id"] > 0)
             {
-                pd = pd.Where(x => x.category_id == productsController._category_id);
+                int cid = (int)Session["category_id"];
+                pd = pd.Where(x => x.category_id == cid);
             }
-            if(productsController._value1 > 0)
+            if((decimal)Session["value1"] > 0)
             {
-                pd = pd.Where(x => x.value >= productsController._value1);
+                decimal v1 = (decimal)Session["value1"];
+                pd = pd.Where(x => x.value >= v1);
             }
-            if (productsController._value2 > 0)
+            if ((decimal)Session["value2"] > 0)
             {
-                pd = pd.Where(x => x.value <= productsController._value2);
+                decimal v2 = (decimal)Session["value2"];
+                pd = pd.Where(x => x.value <= v2);
             }
-
             return pd;
         }
 
@@ -133,17 +132,20 @@ namespace WebApplicationTest3.Controllers
         [Route("~/products/page{page}")]
         public ActionResult Index(int? page)
         {
-            if(page == null) { productsController._pcode = ""; productsController._name = "";
-                productsController._maker_id = 0; productsController._category_id = 0; productsController._value1 = 0;productsController._value2 = 0;
+            if (page == null)
+            {
+                Session["pcode"] = ""; Session["name"] = "";
+                Session["maker_id"] = 0; Session["category_id"] = 0; Session["value1"] = (decimal)0; Session["value2"] = (decimal)0;
             }
+
             int pageNumber = page ?? 1;
             if (pageNumber < 1) pageNumber = 1;
             int pageSize = 7;
 
             ViewBag.category_id = GetCategorySelectList();
             ViewBag.maker_id = GetMakerSelectList();
-            ViewBag.pcode = productsController._pcode;
-            ViewBag.name = productsController._name;
+            ViewBag.pcode = (string)Session["pcode"];
+            ViewBag.name = (string)Session["name"];
             ViewBag.value1 = GetValue1List();
             ViewBag.value2 = GetValue2List();
 
