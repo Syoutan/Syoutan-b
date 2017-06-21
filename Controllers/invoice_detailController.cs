@@ -192,20 +192,19 @@ namespace WebApplicationTest3.Controllers
                 }
             };
 
-            var converter = new StandardConverter(
-                new PdfToolset(
-                    new Win32EmbeddedDeployment(
-                        new TempFolderDeployment()
-                    )
+         var converter = new StandardConverter(
+            new PdfToolset(
+                new WinAnyCPUEmbeddedDeployment(
+                    new TempFolderDeployment()
                 )
-            );
-
-            var pdfData = converter.Convert(document);
+            )
+        );
+        
+        var pdfData = converter.Convert(document);
 
             return File(pdfData, "application/pdf", "PdfSample.pdf");
         }
 
-        [HttpGet]
         public ActionResult IndexPDF(int i_customer_id,int i_year,int i_month)
         {
             try

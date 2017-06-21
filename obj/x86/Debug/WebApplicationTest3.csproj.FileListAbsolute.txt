@@ -66,6 +66,7 @@ D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplication
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\System.Web.WebPages.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\System.Web.WebPages.Razor.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\TuesPechkin.dll
+D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\TuesPechkin.Wkhtmltox.Win32.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\WebGrease.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\PagedList.xml
@@ -117,6 +118,6 @@ D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplication
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\ja\Microsoft.Owin.Security.Google.resources.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\ja\Microsoft.Owin.Security.Twitter.resources.dll
 D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\ja\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\Debug\WebApplicationTest3.dll
-D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\Debug\WebApplicationTest3.pdb
-D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\bin\TuesPechkin.Wkhtmltox.AnyCPU.dll
+D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\x86\Debug\WebApplicationTest3.csprojResolveAssemblyReference.cache
+D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\x86\Debug\WebApplicationTest3.dll
+D:\take\Documents\Visual Studio 2017\Projects\WebApplicationTest3\WebApplicationTest3\obj\x86\Debug\WebApplicationTest3.pdb

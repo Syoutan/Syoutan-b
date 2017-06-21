@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProfitManagement1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="invoice">
+    <Key>
+      <PropertyRef Name="invoice_no" />
+    </Key>
+    <Property Name="invoice_no" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="customer_id" Type="Int32" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="charge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="tax" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="cname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="invoice_detail" Relationship="Self.FK_invoice_detail_invoice" FromRole="invoice" ToRole="invoice_detail" />
+  </EntityType>
+  <EntityType Name="invoice_detail">
+    <Key>
+      <PropertyRef Name="invoice_detail_no" />
+    </Key>
+    <Property Name="invoice_detail_no" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pcode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="pname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="qnt" Type="Int32" Nullable="false" />
+    <Property Name="value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="small_sum" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="invoice_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="invoice" Relationship="Self.FK_invoice_detail_invoice" FromRole="invoice_detail" ToRole="invoice" />
+    <Property Name="sale_id" Type="Int32" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <Association Name="FK_invoice_detail_invoice">
+    <End Role="invoice" Type="Self.invoice" Multiplicity="1" />
+    <End Role="invoice_detail" Type="Self.invoice_detail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="invoice">
+        <PropertyRef Name="invoice_no" />
+      </Principal>
+      <Dependent Role="invoice_detail">
+        <PropertyRef Name="invoice_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ProfitManagement1Entities4" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="invoice" EntityType="Self.invoice" />
+    <EntitySet Name="invoice_detail" EntityType="Self.invoice_detail" />
+    <AssociationSet Name="FK_invoice_detail_invoice" Association="Self.FK_invoice_detail_invoice">
+      <End Role="invoice" EntitySet="invoice" />
+      <End Role="invoice_detail" EntitySet="invoice_detail" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
