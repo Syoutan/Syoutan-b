@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplicationTest3.Models;
 using PagedList;
-using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.Objects;
 
 namespace WebApplicationTest3.Controllers
 {
@@ -182,10 +182,22 @@ namespace WebApplicationTest3.Controllers
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,product_id,supplier_id,value,qnt")] buy buy)
+        public ActionResult Create([Bind(Include = "product_id,supplier_id,value,qnt")] buy buy)
         {
             if (ModelState.IsValid)
             {
+                ObjectParameter result = new ObjectParameter("result", typeof(int));
+                db.InsertBuy(buy.product_id, buy.supplier_id, buy.value, buy.qnt, result);
+                if ((int)result.Value == 0)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("DeleteUserSuccess", "Home", new { message = "失敗" });
+                }
+            }
+                /*
                 DateTime dt = DateTime.Now;
                 buy.date = dt;
                 using (var tran = db.Database.BeginTransaction())
@@ -214,11 +226,9 @@ namespace WebApplicationTest3.Controllers
                             return RedirectToAction("DeleteUserSuccess", "Home", new { message = e.Message });
                         }
                 }
-
-                //db.buy.Add(buy);
-                //db.SaveChanges();
-                //return RedirectToAction("Index");
+                
             }
+            */
 
             ViewBag.product_id = new SelectList(db.product, "id", "pcode", buy.product_id);
             ViewBag.supplier_id = new SelectList(db.supplier, "id", "name", buy.supplier_id);

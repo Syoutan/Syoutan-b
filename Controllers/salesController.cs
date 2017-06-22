@@ -181,7 +181,7 @@ namespace WebApplicationTest3.Controllers
         // 詳細については、https://go.microsoft.com/fwlink/?LinkId=317598 を参照してください。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,product_id,customer_id,value,qnt")] sale sale)
+        public ActionResult Create([Bind(Include = "product_id,customer_id,value,qnt")] sale sale)
         {
             /*
             if (ModelState.IsValid)

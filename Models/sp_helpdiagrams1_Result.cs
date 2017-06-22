@@ -10,16 +10,13 @@
 namespace WebApplicationTest3.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Product_View_1
+    public partial class sp_helpdiagrams1_Result
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public Nullable<decimal> value { get; set; }
-        public int stok { get; set; }
-        public string pcode { get; set; }
-        public string Expr1 { get; set; }
-        public string Expr2 { get; set; }
+        public string Database { get; set; }
+        public string Name { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

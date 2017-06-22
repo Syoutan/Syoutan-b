@@ -29,7 +29,7 @@
     <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="sale" Relationship="Self.FK_sale_customer" FromRole="customer" ToRole="sale" />
-    <Property Name="mailaddress" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="mailaddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="maker">
     <Key>
@@ -89,67 +89,6 @@
     <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="version" Type="Int32" />
     <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-  </EntityType>
-  <EntityType Name="Buy_View_1">
-    <Key>
-      <PropertyRef Name="id" />
-      <PropertyRef Name="value" />
-      <PropertyRef Name="qnt" />
-      <PropertyRef Name="date" />
-      <PropertyRef Name="pcode" />
-      <PropertyRef Name="name" />
-      <PropertyRef Name="stok" />
-      <PropertyRef Name="Expr1" />
-      <PropertyRef Name="Expr2" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" />
-    <Property Name="value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <Property Name="qnt" Type="Int32" Nullable="false" />
-    <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="pcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="stok" Type="Int32" Nullable="false" />
-    <Property Name="Expr1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Expr2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Product_View_1">
-    <Key>
-      <PropertyRef Name="id" />
-      <PropertyRef Name="name" />
-      <PropertyRef Name="stok" />
-      <PropertyRef Name="pcode" />
-      <PropertyRef Name="Expr1" />
-      <PropertyRef Name="Expr2" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" />
-    <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="value" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="stok" Type="Int32" Nullable="false" />
-    <Property Name="pcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Expr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Expr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Sale_View_1">
-    <Key>
-      <PropertyRef Name="id" />
-      <PropertyRef Name="value" />
-      <PropertyRef Name="qnt" />
-      <PropertyRef Name="date" />
-      <PropertyRef Name="pcode" />
-      <PropertyRef Name="name" />
-      <PropertyRef Name="Expr1" />
-      <PropertyRef Name="stok" />
-      <PropertyRef Name="Expr2" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" />
-    <Property Name="value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <Property Name="qnt" Type="Int32" Nullable="false" />
-    <Property Name="date" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-    <Property Name="pcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Expr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="stok" Type="Int32" Nullable="false" />
-    <Property Name="Expr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
   <Association Name="FK_buy_product">
     <End Role="product" Type="Self.product" Multiplicity="1" />
@@ -232,9 +171,6 @@
     <EntitySet Name="sale" EntityType="Self.sale" />
     <EntitySet Name="supplier" EntityType="Self.supplier" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-    <EntitySet Name="Buy_View_1" EntityType="Self.Buy_View_1" />
-    <EntitySet Name="Product_View_1" EntityType="Self.Product_View_1" />
-    <EntitySet Name="Sale_View_1" EntityType="Self.Sale_View_1" />
     <AssociationSet Name="FK_buy_product" Association="Self.FK_buy_product">
       <End Role="product" EntitySet="product" />
       <End Role="buy" EntitySet="buy" />
@@ -289,12 +225,60 @@
       <Parameter Name="new_diagramname" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="sp_upgraddiagrams" />
+    <FunctionImport Name="InsertBuy">
+      <Parameter Name="product_id" Mode="In" Type="Int32" />
+      <Parameter Name="supplier_id" Mode="In" Type="Int32" />
+      <Parameter Name="value" Mode="In" Type="Decimal" />
+      <Parameter Name="qnt" Mode="In" Type="Int32" />
+      <Parameter Name="result" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_alterdiagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition1" ReturnType="Collection(ProductManage1Model.sp_helpdiagramdefinition1_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams1" ReturnType="Collection(ProductManage1Model.sp_helpdiagrams1_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams1" />
   </EntityContainer>
   <ComplexType Name="sp_helpdiagramdefinition_Result">
     <Property Type="Int32" Name="version" Nullable="true" />
     <Property Type="Binary" Name="definition" Nullable="true" />
   </ComplexType>
   <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagramdefinition1_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams1_Result">
     <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
     <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
     <Property Type="Int32" Name="ID" Nullable="false" />

@@ -12,10 +12,7 @@
         <EntityTypeShape EntityType="ProductManage1Model.product" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ProductManage1Model.sale" Width="1.5" PointX="8.25" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ProductManage1Model.supplier" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProductManage1Model.sysdiagrams" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProductManage1Model.Buy_View_1" Width="1.5" PointX="2.75" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProductManage1Model.Product_View_1" Width="1.5" PointX="4.75" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProductManage1Model.Sale_View_1" Width="1.5" PointX="6.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProductManage1Model.sysdiagrams" Width="1.5" PointX="1.25" PointY="8.875" IsExpanded="true" />
         <AssociationConnector Association="ProductManage1Model.FK_buy_product" ManuallyRouted="false" />
         <AssociationConnector Association="ProductManage1Model.FK_buy_supplier" ManuallyRouted="false" />
         <AssociationConnector Association="ProductManage1Model.FK_product_category" ManuallyRouted="false" />

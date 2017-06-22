@@ -10,18 +10,10 @@
 namespace WebApplicationTest3.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Sale_View_1
+    public partial class sp_helpdiagramdefinition1_Result
     {
-        public int id { get; set; }
-        public decimal value { get; set; }
-        public int qnt { get; set; }
-        public byte[] date { get; set; }
-        public string pcode { get; set; }
-        public string name { get; set; }
-        public string Expr1 { get; set; }
-        public int stok { get; set; }
-        public string Expr2 { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }
